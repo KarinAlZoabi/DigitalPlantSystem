@@ -1,22 +1,57 @@
 import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../styles/colors';
+import HealthyBadge from "./../images/badges/Healthy.png"
+import CriticalBadge from "./../images/badges/Critical.png"
+import AttentionBadge from "./../images/badges/NeedsAttention.png"
+
+const STATUS_BADGES = {
+  healthy: HealthyBadge,
+  attention: AttentionBadge,
+  critical: CriticalBadge,
+};
+
+const BadgeImage = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+`;
 
 const Card = styled.div`
   background: white;
-  border-radius: 24px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 350px;
+  max-width: 400px;
+  margin: 0 auto;
+
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.12);
+  }
+
+
+  &:active {
+    transform: translateY(-4px) scale(1.01);
+  }
 `;
 
 const ImageContainer = styled.div`
-  height: 220px;
+  height: 190px;
   width: 100%;
   background-image: url(${props => props.src});
   background-size: cover;
   background-position: center;
+
+  transition: transform 0.5s ease;
+
+
+  ${Card}:hover & {
+    transform: scale(1.1);
 `;
 
 const Content = styled.div`
@@ -34,31 +69,22 @@ const Header = styled.div`
 const TitleGroup = styled.div`
   h2 {
     margin: 0;
-    font-size: 28px;
+    font-size: 20px;
     color: #333;
+
   }
   span {
     font-style: italic;
     color: #888;
-    font-size: 16px;
+    font-size: 14px;
   }
-`;
-
-const HealthDot = styled.div`
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: ${props => 
-    props.status === 'healthy' ? '#E9B84C' : // Golden/Orange like image
-    props.status === 'critical' ? '#E74C3C' : '#5DA480'};
-  box-shadow: inset 0px -2px 5px rgba(0,0,0,0.2);
 `;
 
 const InfoRow = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #666;
   font-size: 15px;
 
@@ -69,22 +95,22 @@ const InfoRow = styled.div`
 
 const WaterButton = styled.button`
   width: 100%;
-  background-color: #3E7D5F;
+  background-color: ${COLORS.primaryButton};
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 5px;
   transition: background 0.2s;
 
-  &:hover { background-color: #2D5D46; }
+  &:hover { background-color: ${COLORS.primaryButtonHover}; }
 `;
 
 export default function UserPlantCard({ userPlant }) {
@@ -99,7 +125,10 @@ export default function UserPlantCard({ userPlant }) {
             <h2>{nickname}</h2>
             <span>{plantDetails.scientificName}</span>
           </TitleGroup>
-          <HealthDot status={healthStatus} />
+          <BadgeImage 
+            src={STATUS_BADGES[healthStatus] || HealthyBadge} 
+            alt={healthStatus} 
+          />
         </Header>
 
         <InfoRow>

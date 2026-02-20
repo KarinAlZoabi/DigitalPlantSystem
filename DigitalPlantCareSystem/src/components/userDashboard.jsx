@@ -1,6 +1,6 @@
 import { COLORS } from "../styles/colors";
 import { useState } from "react";
-import { userPlants } from "./../UserPlantData.js"
+import { userPlants } from "./../UserPlantData.js";
 import NavBar from "./general/NavBar";
 import PillSelector from "./general/pillSelector";
 import UserPlantCard from "./UserPlantCard";
@@ -9,7 +9,9 @@ import {
   AddPlantButton,
   StatDiv,
   PageSection,
-} from "../styles/UserDashboard.styles";
+  PlantGrid,
+  FilterSection,
+} from "../styles/UserDashboardStyles";
 import HealthyBadge from "./../images/../images/badges/Healthy.png";
 import AttentionBadge from "./../images/../images/badges/NeedsAttention.png";
 import CriticalBadge from "./../images/../images/badges/Critical.png";
@@ -88,21 +90,24 @@ export default function UserDashboard() {
         ))}
       </PageSection>
 
-      <PageSection style={{marginTop: 10}}>
-       <PillSelector
+      <FilterSection style={{ marginTop: 20 }}>
+        <PillSelector
           options={filterOptions}
           activeValue={currentFilter}
           onChange={(id) => setCurrentFilter(id)}
         />
 
-       <div>
-         {userPlants
-               .filter(up => currentFilter === "all" || up.healthStatus === currentFilter)
-               .map((up) => (
-          <UserPlantCard key={up.id} userPlant={up} />
-               ))}
-       </div>
-      </PageSection>
+        <PlantGrid>
+          {userPlants
+            .filter(
+              (up) =>
+                currentFilter === "all" || up.healthStatus === currentFilter,
+            )
+            .map((up) => (
+              <UserPlantCard key={up.id} userPlant={up} />
+            ))}
+        </PlantGrid>
+      </FilterSection>
     </>
   );
 }

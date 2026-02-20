@@ -1,9 +1,17 @@
+import monsteraImg from "./images/plants/Monstera-Deliciosa.jpg";
+import DracaenaImg from "./images/plants/Dracaena-Trifasciata.jpg";
+import FicusImg from "./images/plants/Ficus-Lyrata.jpg";
+import LavandulaImg from "./images/plants/Lavandula-Angustifolia.jpg";
+import EpipremnumImg from "./images/plants/Epipremnum-Aureum.jpg";
+import AloeImg from "./images/plants/Aloe-Barbadensis-Miller.jpg";
+
+
 export const plants = [
   {
     id: 1,
     createdAt: "2024-01-15T10:00:00Z",
     updatedAt: "2024-02-01T14:30:00Z",
-    imagePath: "./images/plants/Monstera-Deliciosa.jpg",
+    imagePath: monsteraImg,
     scientificName: "Monstera Deliciosa",
     name: "Monstera",
     description: "Known for its iconic natural leaf holes, this 'Swiss Cheese Plant' is a statement piece for any room.",
@@ -21,7 +29,7 @@ export const plants = [
     id: 2,
     createdAt: "2024-01-16T09:00:00Z",
     updatedAt: "2024-01-16T09:00:00Z",
-    imagePath: "/images/snake-plant.jpg",
+    imagePath: DracaenaImg,
     scientificName: "Dracaena Trifasciata",
     name: "Snake Plant",
     description: "A hardy succulent that can tolerate low light and irregular watering.",
@@ -39,7 +47,7 @@ export const plants = [
     id: 3,
     createdAt: "2024-01-18T11:20:00Z",
     updatedAt: "2024-01-20T16:45:00Z",
-    imagePath: "/images/fiddly-leaf.jpg",
+    imagePath: FicusImg,
     scientificName: "Ficus Lyrata",
     name: "Fiddle Leaf Fig",
     description: "A popular indoor tree with large, violin-shaped leaves.",
@@ -57,7 +65,7 @@ export const plants = [
     id: 4,
     createdAt: "2024-01-22T08:15:00Z",
     updatedAt: "2024-01-22T08:15:00Z",
-    imagePath: "/images/lavender.jpg",
+    imagePath: LavandulaImg,
     scientificName: "Lavandula Angustifolia",
     name: "Lavender",
     description: "Fragrant purple flowers that thrive in sunny outdoor spots.",
@@ -75,7 +83,7 @@ export const plants = [
     id: 5,
     createdAt: "2024-01-25T14:00:00Z",
     updatedAt: "2024-01-25T14:00:00Z",
-    imagePath: "/images/pothos.jpg",
+    imagePath: EpipremnumImg,
     scientificName: "Epipremnum Aureum",
     name: "Golden Pothos",
     description: "A trailing vine that is nearly impossible to kill.",
@@ -93,7 +101,7 @@ export const plants = [
     id: 6,
     createdAt: "2024-02-05T12:00:00Z",
     updatedAt: "2024-02-05T12:00:00Z",
-    imagePath: "/images/aloe-vera.jpg",
+    imagePath: AloeImg,
     scientificName: "Aloe Barbadensis Miller",
     name: "Aloe Vera",
     description: "A functional succulent known for the soothing gel inside its leaves.",

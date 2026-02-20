@@ -38,6 +38,13 @@ padding: 10px 50px;
 gap: 40px;
 `
 
+export const FilterSection = styled(PageSection)`
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 10px 50px;
+`;
+
 export const StatDiv = styled.div`
 display: flex;
 flex-direction: column;
@@ -46,8 +53,25 @@ justify-content: center;
 background: ${COLORS.white};
 border: 1px solid ${COLORS.secondaryText};
 width:300px;
-height: 80px;
+height: 60px;
 border-radius: 20px;
-padding: 30px 30px;
+padding: 25px 30px;
 
 `
+
+export const PlantGrid = styled.div`
+  display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+
+  /* Responsive: 2 columns on tablets, 1 on mobile */
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
