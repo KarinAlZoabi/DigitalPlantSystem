@@ -3,7 +3,7 @@ export const plants = [
     id: 1,
     createdAt: "2024-01-15T10:00:00Z",
     updatedAt: "2024-02-01T14:30:00Z",
-    imagePath: "/images/monstera.jpg",
+    imagePath: "./images/plants/Monstera-Deliciosa.jpg",
     scientificName: "Monstera Deliciosa",
     name: "Monstera",
     description: "Known for its iconic natural leaf holes, this 'Swiss Cheese Plant' is a statement piece for any room.",

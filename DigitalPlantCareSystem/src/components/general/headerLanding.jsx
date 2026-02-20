@@ -1,6 +1,6 @@
 import { COLORS } from "../../styles/colors";
 import "./../../styles/header.css"
-export default function Header(){
+export default function HeaderLanding(){
     return(
         <header className="navbar">
         <div className="logo">
