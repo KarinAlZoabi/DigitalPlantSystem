@@ -4,6 +4,7 @@ import { COLORS } from '../styles/colors';
 import HealthyBadge from "./../images/badges/Healthy.png"
 import CriticalBadge from "./../images/badges/Critical.png"
 import AttentionBadge from "./../images/badges/NeedsAttention.png"
+import { useNavigate } from 'react-router-dom';
 
 const STATUS_BADGES = {
   healthy: HealthyBadge,
@@ -114,10 +115,16 @@ const WaterButton = styled.button`
 `;
 
 export default function UserPlantCard({ userPlant }) {
-  const { nickname, plantDetails, lastWatered, healthStatus, location } = userPlant;
+  const navigate = useNavigate();
+  const { id, nickname, plantDetails, lastWatered, healthStatus, location } = userPlant;
+
+  const handleCardClick = () => {
+    // Navigates to a dynamic route like /plant/up-1
+    navigate(`/plant/${id}`);
+  };
 
   return (
-    <Card>
+    <Card onClick={handleCardClick}>
       <ImageContainer src={plantDetails.imagePath} />
       <Content>
         <Header>
