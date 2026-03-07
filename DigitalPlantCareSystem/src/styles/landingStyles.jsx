@@ -83,6 +83,7 @@ export const LandingMainText = styled.p`
 color: ${COLORS.primaryText};
 font-size: 50px;
 font-weight: bold;
+margin-bottom: 0;
 `
 
 export const LandingSubText = styled.p`
@@ -109,7 +110,7 @@ justify-content: center;
 height: 150px;
 width: 300px;
 padding: 10px 20px;
-gap: 20px;
+
 
 box-shadow: 0 4px 6px rgba(0,0,0,0.02);
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -125,6 +126,7 @@ export const FeatureTitle = styled.p`
 color: ${COLORS.primaryText};
 font-size: 20px;
 font-weight: bold;
+margin-bottom: 0;
 `
 export const FeatureDescription = styled.p`
 color: ${COLORS.secondaryText};

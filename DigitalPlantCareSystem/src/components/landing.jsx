@@ -18,7 +18,7 @@ import {
   FeatureDescription,
   CTAsection,
   CTAbtn,
-} from "../styles/landingStyles";
+} from "./../styles/landingStyles";
 
 export default function Landing() {
   const features = [
@@ -94,10 +94,10 @@ export default function Landing() {
 
       <FeatureSection>
         <div style={{ textAlign: "center" }}>
-          <LandingMainText style={{ fontSize: 20 }}>
+          <LandingMainText style={{ fontSize: 35 }}>
             Everything You Need to Care for Your Plants
           </LandingMainText>
-          <LandingSubText style={{ fontSize: 15 }}>
+          <LandingSubText style={{ fontSize: 20 }}>
             Simple, powerful tools to keep your plants thriving
           </LandingSubText>
         </div>

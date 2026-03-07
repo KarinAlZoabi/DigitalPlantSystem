@@ -5,12 +5,13 @@ import NavBar from "./general/NavBar";
 import PillSelector from "./general/pillSelector";
 import { useNavigate } from "react-router-dom";
 
-
 import CareInfoTab from "./careInfoTab";
 import GrowthTrackingTab from "./GrowthTrackingTab";
 import HealthStatusTab from "./HealthStatusTab";
 
-
+import HealthyBadge from "./../images/badges/Healthy.png";
+import CriticalBadge from "./../images/badges/Critical.png";
+import AttentionBadge from "./../images/badges/NeedsAttention.png";
 
 const PageContainer = styled.div`
   background-color: ${COLORS.backgroundGreen};
@@ -61,7 +62,7 @@ const SidebarContent = styled.div`
     font-style: italic;
     color: ${COLORS.secondaryText};
     margin-bottom: 20px;
-    margin-top:0;
+    margin-top: 0;
   }
 `;
 
@@ -91,27 +92,26 @@ const ActionButton = styled.button`
       : "none"};
 `;
 
-
-const StatusBadgeContainer = styled.div`
+const StatusBadge = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: ${props => props.$bgColor};
+  background-color: ${(props) => props.$bgColor};
   color: ${COLORS.primaryText};
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 6px 16px;
+  border-radius: 12px;
   width: fit-content;
   font-size: 14px;
-  margin-bottom: 15px;
-  border: 1px solid ${props => props.$borderColor};
-  font-weight: 500;
-  text-transform: capitalize;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border: 1px solid ${(props) => props.$borderColor};
 `;
 
 const BadgeIcon = styled.img`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
+  border-radius: 50%;
 `;
 
 export default function PlantDetails({ userPlant }) {
@@ -119,6 +119,36 @@ export default function PlantDetails({ userPlant }) {
   const { nickname, plantDetails, location, healthStatus } = userPlant;
 
   const navigate = useNavigate();
+
+  // Helper to get badge styling based on status
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "healthy":
+        return {
+          bg: COLORS.healthyBg,
+          border: COLORS.healthyStroke,
+          icon: HealthyBadge,
+          text: "Healthy",
+        };
+      case "critical":
+        return {
+          bg: COLORS.criticalBg,
+          border: COLORS.criticalStroke,
+          icon: CriticalBadge,
+          text: "Critical",
+        };
+      case "attention":
+      default:
+        return {
+          bg: COLORS.attentionBg,
+          border: COLORS.attentionStroke,
+          icon: AttentionBadge,
+          text: "Needs attention",
+        };
+    }
+  };
+
+  const statusStyle = getStatusStyles(healthStatus);
 
   const tabOptions = [
     { id: "care", label: "Care Info" },
@@ -142,7 +172,14 @@ export default function PlantDetails({ userPlant }) {
               <h1>{nickname}</h1>
               <p className="scientific">{plantDetails.scientificName}</p>
 
-              {/* Status Badge would go here */}
+              {/* Dynamic Status Badge */}
+              <StatusBadge
+                $bgColor={statusStyle.bg}
+                $borderColor={statusStyle.border}
+              >
+                <BadgeIcon src={statusStyle.icon} alt="" />
+                {statusStyle.text}
+              </StatusBadge>
 
               <div
                 style={{
@@ -171,7 +208,9 @@ export default function PlantDetails({ userPlant }) {
             </SidebarContent>
           </Sidebar>
 
-          <div> {/* This div holds both the selector AND the content */}
+          <div>
+            {" "}
+            {/* This div holds both the selector AND the content */}
             <div style={{ marginBottom: 30 }}>
               <PillSelector
                 options={tabOptions}
@@ -179,11 +218,12 @@ export default function PlantDetails({ userPlant }) {
                 onChange={(id) => setActiveTab(id)}
               />
             </div>
-
             {/* Put the content logic back here! */}
-            {activeTab === 'care' && <CareInfoTab plant={plantDetails} />}
-            {activeTab === 'growth' && <GrowthTrackingTab />}
-            {activeTab === 'health' && <HealthStatusTab currentStatus={healthStatus} />}
+            {activeTab === "care" && <CareInfoTab plant={plantDetails} />}
+            {activeTab === "growth" && <GrowthTrackingTab />}
+            {activeTab === "health" && (
+              <HealthStatusTab currentStatus={healthStatus} />
+            )}
           </div>
         </DetailsGrid>
       </PageContainer>

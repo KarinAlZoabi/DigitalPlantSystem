@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 // Component Imports
 import UserDashboard from './components/userDashboard';
 import PlantDetails from './components/plantDetails';
+import Landing from './components/landing';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -28,12 +29,15 @@ function App() {
   return (
     <>
       <GlobalStyle />
+
+      {/* <Landing/> */}
+    
       <BrowserRouter>
         <Routes>
-          {/* Dashboard is your home page */}
+        
           <Route path="/" element={<UserDashboard />} />
           
-          {/* Details page for specific plants */}
+          
           <Route path="/plant/:id" element={<PlantDetailsWrapper />} />
         </Routes>
       </BrowserRouter>

@@ -16,7 +16,41 @@ const StatusBox = styled.div`
   border: 1px solid ${props => props.border};
 `;
 
-export default function HealthStatusTab() {
+const CurrentStatusSection = styled.div`
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+`;
+
+const StatusMessage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: ${props => props.$color || COLORS.primaryGreen};
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+`;
+
+export default function HealthStatusTab({ currentStatus }) {
+
+  const statusContent = {
+    healthy: {
+      text: "All care tasks are on schedule",
+      color: COLORS.healthy
+    },
+    attention: {
+      text: "Care tasks are coming up soon or slightly overdue",
+      color: COLORS.attentionStroke
+    },
+    critical: {
+      text: "Immediate attention required for overdue tasks!",
+      color: COLORS.criticalStroke
+    }
+  };
+
+  const content = statusContent[currentStatus] || statusContent.healthy;
+
   return (
     <div style={{ background: 'white', padding: 24, borderRadius: 20 }}>
       <h3>Health Status Explanation</h3>
@@ -41,6 +75,16 @@ export default function HealthStatusTab() {
           <div style={{ fontSize: 12 }}>Care tasks are significantly overdue. Immediate attention required!</div>
         </div>
       </StatusBox>
+
+      <CurrentStatusSection>
+        <div style={{ fontWeight: 600, fontSize: 14 }}>Current Status: {currentStatus}</div>
+        <StatusMessage $color={content.color}>
+          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+            {currentStatus === 'healthy' ? 'check_circle' : 'info'}
+          </span>
+          {content.text}
+        </StatusMessage>
+      </CurrentStatusSection>
     </div>
   );
 }
