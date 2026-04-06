@@ -1,6 +1,5 @@
 import { COLORS } from "../styles/colors";
-import { useState } from "react";
-import { userPlants } from "./../UserPlantData.js";
+import { useState, useEffect } from "react";
 import NavBar from "./general/NavBar";
 import PillSelector from "./general/pillSelector";
 import UserPlantCard from "./UserPlantCard";
@@ -16,25 +15,38 @@ import HealthyBadge from "./../images/../images/badges/Healthy.png";
 import AttentionBadge from "./../images/../images/badges/NeedsAttention.png";
 import CriticalBadge from "./../images/../images/badges/Critical.png";
 export default function UserDashboard() {
+  const [userPlants, setUserPlants] = useState([]);
   const [currentFilter, setCurrentFilter] = useState("all");
+
+  useEffect(() => {
+    // Replace with the ID generated when you ran your seed script
+    const userId = "69d391dfba96b583cacd69db"; 
+    
+    fetch(`http://localhost:5000/api/userPlants/?userId=${userId}`)
+      .then(res => res.json())
+      .then(data => setUserPlants(data))
+      .catch(err => console.error("Fetch error:", err));
+  }, []);
+
+
   const stats = [
     {
       title: "Total Plants",
-      number: 6,
+      number: userPlants.length,
     },
     {
       title: "Healthy",
-      number: 3,
+      number: userPlants.filter(p => p.healthStatus === "healthy").length,
       badge: HealthyBadge,
     },
     {
       title: "Need Attention",
-      number: 2,
+      number: userPlants.filter(p => p.healthStatus === "attention").length,
       badge: AttentionBadge,
     },
     {
       title: "Critical",
-      number: 1,
+      number: userPlants.filter(p => p.healthStatus === "critical").length,
       badge: CriticalBadge,
     },
   ];

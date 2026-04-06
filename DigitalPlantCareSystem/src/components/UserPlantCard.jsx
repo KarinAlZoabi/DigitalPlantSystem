@@ -52,7 +52,7 @@ const ImageContainer = styled.div`
 
 
   ${Card}:hover & {
-    transform: scale(1.1);
+    transform: scale(1.1);}
 `;
 
 const Content = styled.div`
@@ -116,21 +116,21 @@ const WaterButton = styled.button`
 
 export default function UserPlantCard({ userPlant }) {
   const navigate = useNavigate();
-  const { id, nickname, plantDetails, lastWatered, healthStatus, location } = userPlant;
+  const { _id, nickname, plantTypeId, lastWatered, healthStatus, location } = userPlant;
 
   const handleCardClick = () => {
     // Navigates to a dynamic route like /plant/up-1
-    navigate(`/plant/${id}`);
+    navigate(`/plant/${_id}`);
   };
 
   return (
     <Card onClick={handleCardClick}>
-      <ImageContainer src={plantDetails.imagePath} />
+      <ImageContainer src={plantTypeId.imagePath} />
       <Content>
         <Header>
           <TitleGroup>
             <h2>{nickname}</h2>
-            <span>{plantDetails.scientificName}</span>
+            <span>{plantTypeId.scientificName}</span>
           </TitleGroup>
           <BadgeImage 
             src={STATUS_BADGES[healthStatus] || HealthyBadge} 

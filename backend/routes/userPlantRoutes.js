@@ -7,7 +7,7 @@ const {
 } = require("../controllers/userPlantController");
 
 router.get("/", getUserPlants);
-router.post("/", addUserPlant);
-router.get("/:id", getUserPlantById);
+// router.post("/", addUserPlant);
+// router.get("/:id", getUserPlantById);
 
 module.exports = router;

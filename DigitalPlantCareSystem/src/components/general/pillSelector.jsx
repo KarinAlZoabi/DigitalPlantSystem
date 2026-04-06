@@ -2,13 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../../styles/colors';
 const Container = styled.div`
-  display: inline-flex;
-  position: relative; /* Needed for absolute child */
+  display: flex;
+  width: 100%; 
+  max-width: 600px; 
+  position: relative;
   align-items: center;
   background-color: ${COLORS.secondaryGreen};
   border-radius: 50px;
   padding: 6px;
-  isolation: isolate; /* Ensures children stay above the slider */
+  isolation: isolate;
 `;
 
 const Slider = styled.div`
@@ -16,24 +18,22 @@ const Slider = styled.div`
   top: 6px;
   bottom: 6px;
   left: 6px;
-  /* Calculate width based on number of options */
   width: calc((100% - 12px) / ${props => props.totalOptions});
   background-color: ${COLORS.primaryGreen};
   border-radius: 40px;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Slide based on active index */
   transform: translateX(${props => props.activeIndex * 100}%);
   z-index: -1; 
 `;
 
 const Pill = styled.button`
-  background: transparent; /* Always transparent now */
+  background: transparent;
   color: ${COLORS.white};
   border: none;
-  flex: 1; /* Ensure all pills are same width for perfect sliding */
-  padding: 12px 24px;
+  flex: 1 0 0; 
+  padding: 12px 10px;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -41,7 +41,6 @@ const Pill = styled.button`
   white-space: nowrap;
   z-index: 1;
 
-  /* Remove individual hover backgrounds to keep the slide clean */
   &:hover {
     opacity: 0.8;
   }

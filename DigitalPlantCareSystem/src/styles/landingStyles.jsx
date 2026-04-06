@@ -6,17 +6,34 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
+// Breakpoints for easier maintenance
+const device = {
+  mobile: `(max-width: 768px)`,
+};
+
 
 export const HeaderDiv = styled.div`
 display: flex;
 flex-direction: row;
-padding: 30px 50px 20px 50px;
+padding:20px 5%;
 align-items: center;
 justify-content: space-between;
-animation: ${fadeIn} 0.6s ease-out;`
+animation: ${fadeIn} 0.6s ease-out;
+
+@media ${device.mobile} {
+    padding: 15px 20px;
+  }`;
+
+export const LogoImg = styled.img`
+  width: 120px;
+  @media ${device.mobile} {
+    width: 90px;
+  }
+`;  
 
 export const LoginBtn = styled.button`
   background-color: ${COLORS.white};
+  font-family: poppins;
   width: 90px;
   padding: 10px;
   border-radius: 12px;
@@ -38,6 +55,7 @@ export const LoginBtn = styled.button`
 `;
 export const ColoredBtn = styled.button`
   background-color: ${COLORS.primaryButton};
+    font-family: poppins;
   width: 90px;
   padding: 10px;
   border-radius: 12px;
@@ -62,7 +80,7 @@ export const ColoredBtn = styled.button`
 
 export const HeroSection = styled.section`
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   background-image: url(${props => props.image});
   background-size: cover;
   background-position: center;
@@ -73,22 +91,49 @@ export const HeroSection = styled.section`
   align-items: left;
   justify-content: center;
   text-align: left;
+    font-family: poppins;
 
   & > div {
     animation: ${fadeIn} 0.8s ease-out;
   }
+
+  @media ${device.mobile} {
+    text-align: center;
+    justify-content: center;
+    min-height: 60vh;
+  }
 `;
 
-export const LandingMainText = styled.p`
+export const HeroContent = styled.div`
+  padding: 50px;
+  width: 50%;
+  animation: ${fadeIn} 0.8s ease-out;
+
+  @media ${device.mobile} {
+    width: 100%;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+export const LandingMainText = styled.h1`
 color: ${COLORS.primaryText};
-font-size: 50px;
+font-size: clamp(30px, 5vw, 50px);
 font-weight: bold;
 margin-bottom: 0;
+line-height: 60px;
+
+@media ${device.mobile} {
+    font-size: 32px;
+  }
 `
 
 export const LandingSubText = styled.p`
 color: ${COLORS.secondaryText};
-font-size: 20px;`
+font-size: clamp(16px, 2vw, 20px);
+`
 
 //FEATURES
 export const FeatureSection = styled.section`
@@ -97,31 +142,55 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 padding: 30px;
-`
+  font-family: poppins;
+`;
+
+export const FeatureGrid = styled.div`
+  display: grid;
+  /* Desktop: Exactly 4 columns */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px; /* Increased this to give 4 cards more breathing room */
+  margin: 40px auto 0 auto; /* Centers the grid itself */
+
+  /* Tablet: 2 columns */
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+  }
+
+  /* Mobile: 1 column */
+  @media ${device.mobile} {
+    grid-column-gap: 0;
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+`;
 
 export const FeatureCard = styled.div`
-border-radius: 25px;
-border: 1px solid ${COLORS.secondaryText};
-background: ${COLORS.white};
-display: flex;
-flex-direction: column;
-align-items: left;
-justify-content: center;
-height: 150px;
-width: 300px;
-padding: 10px 20px;
+  border-radius: 25px;
+  border: 1px solid ${COLORS.secondaryText};
+  background: ${COLORS.white};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start; /* Start from top so text doesn't jitter */
+  
+  /* CRITICAL: No fixed widths here */
+  width: 100%; 
+  min-height: 180px; 
+  padding: 24px;
+  box-sizing: border-box; /* Ensures padding stays inside the 100% width */
 
-
-box-shadow: 0 4px 6px rgba(0,0,0,0.02);
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  cursor: default;
 
   &:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     border-color: ${COLORS.primaryGreen};
   }
-`
+`;
 export const FeatureTitle = styled.p`
 color: ${COLORS.primaryText};
 font-size: 20px;
@@ -139,7 +208,8 @@ background: ${COLORS.backgroundGreen};
 display: flex;
 justify-content: center;
 align-items: center;
-padding: 50px;`;
+padding: 50px;
+  font-family: poppins;`;
 
 export const CTAbtn = styled(ColoredBtn)`
 background: ${COLORS.white};

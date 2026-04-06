@@ -1,36 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
 import { COLORS } from './../styles/colors';
 import HealthyBadge from "./../images/badges/Healthy.png"
 import CriticalBadge from "./../images/badges/Critical.png"
 import AttentionBadge from "./../images/badges/NeedsAttention.png"
 
-const StatusBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  background: ${props => props.bg};
-  border: 1px solid ${props => props.border};
-`;
-
-const CurrentStatusSection = styled.div`
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-`;
-
-const StatusMessage = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: ${props => props.$color || COLORS.primaryGreen};
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 500;
-`;
+import { CurrentStatusSection,
+    StatusBox,
+    StatusMessage} from "./../styles/TabStyles"
 
 export default function HealthStatusTab({ currentStatus }) {
 

@@ -1,18 +1,21 @@
 import { COLORS } from "../styles/colors";
 import Logo from "./../images/logo/Logo.svg";
-import HeroImg from "./../images/HeroImg.png";
+import HeroImg from "./../images/image 2.png";
 import CalendarIcon from "./../images/icons/calendar.svg";
 import HeartIcon from "./../images/icons/heart.svg";
 import ArrowUpIcon from "./../images/icons/arrow-trend-up.svg";
-
+import "./../app.css"
 import {
   LoginBtn,
+  LogoImg,
   ColoredBtn,
   HeaderDiv,
   LandingMainText,
   LandingSubText,
   HeroSection,
+  HeroContent,
   FeatureSection,
+  FeatureGrid,
   FeatureCard,
   FeatureTitle,
   FeatureDescription,
@@ -60,7 +63,7 @@ export default function Landing() {
     <>
       <header>
         <HeaderDiv>
-          <img style={{ width: "12%" }} src={Logo} alt="" />
+          <LogoImg src={Logo} alt="PlantCare Logo" />
           <div style={{ display: "flex", flexDirection: "row", gap: 30 }}>
             <LoginBtn>Login</LoginBtn>
             <ColoredBtn>Sign Up</ColoredBtn>
@@ -68,7 +71,7 @@ export default function Landing() {
         </HeaderDiv>
       </header>
       <HeroSection image={HeroImg}>
-        <div style={{ padding: 50, width: "40%" }}>
+       <HeroContent>
           <LandingMainText>
             Your Personal{" "}
             <span style={{ color: COLORS.primaryGreen }}>Plant Care</span>{" "}
@@ -89,12 +92,12 @@ export default function Landing() {
             <ColoredBtn style={{ width: 140 }}>Get Started Free</ColoredBtn>
             <LoginBtn>Login</LoginBtn>
           </div>
-        </div>
+        </HeroContent>
       </HeroSection>
 
       <FeatureSection>
         <div style={{ textAlign: "center" }}>
-          <LandingMainText style={{ fontSize: 35 }}>
+          <LandingMainText style={{ fontSize: "clamp(28px, 4vw, 35px)" }}>
             Everything You Need to Care for Your Plants
           </LandingMainText>
           <LandingSubText style={{ fontSize: 20 }}>
@@ -102,7 +105,7 @@ export default function Landing() {
           </LandingSubText>
         </div>
 
-        <div style={{ display: "flex", gap: 20, margin: 30 }}>
+        <FeatureGrid>
           {features.map((feature, index) => (
             <FeatureCard key={index}>
               <div
@@ -118,7 +121,7 @@ export default function Landing() {
               >
                 {feature.iconType === "material" ? (
                   <span
-                    className="material-symbols-outlined"
+                    class="material-symbols-outlined"
                     style={{ color: feature.color, fontSize: 35 }}
                   >
                     {feature.icon}
@@ -134,7 +137,7 @@ export default function Landing() {
               </div>
             </FeatureCard>
           ))}
-        </div>
+        </FeatureGrid>
       </FeatureSection>
 
       <CTAsection>
@@ -170,6 +173,7 @@ export default function Landing() {
           color: COLORS.secondaryText,
           textAlign: "center",
           padding: 20,
+          fontFamily: "Poppins"
         }}
       >
         © 2026 PlantCare. Your digital plant care assistant.

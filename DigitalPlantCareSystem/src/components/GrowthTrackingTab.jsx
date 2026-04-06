@@ -2,34 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from './../styles/colors';
 
-const NoteArea = styled.textarea`
-  width: 100%;
-  height: 100px;
-  border-radius: 12px;
-  border: 1px solid #eee;
-  padding: 12px;
-  background: #f9f9f9;
-  resize: none;
-  margin: 15px 0;
-`;
-
-const TimelineItem = styled.div`
-  padding: 12px 0;
-  border-left: 2px solid ${COLORS.secondaryGreen};
-  padding-left: 20px;
-  position: relative;
-  margin-left: 10px;
-  &::before {
-    content: '';
-    position: absolute;
-    left: -7px;
-    top: 15px;
-    width: 12px;
-    height: 12px;
-    background: ${COLORS.primaryGreen};
-    border-radius: 50%;
-  }
-`;
+import { 
+ NoteArea, TimelineItem
+} from "./../styles/TabStyles";
 
 export default function GrowthTrackingTab() {
   return (

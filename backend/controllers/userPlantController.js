@@ -1,40 +1,29 @@
+const mongoose = require("mongoose");
+require("../models/PlantType");
 const UserPlant = require("../models/UserPlant");
-const PlantType = require("../models/PlantType");
 
-// GET all plants for a user
 exports.getUserPlants = async (req, res) => {
   try {
-    const userId = req.query.userId;
+    const { userId } = req.query;
 
-    const plants = await UserPlant.find({ userId })
-      .populate("plantTypeId");
+    // 1. Check if userId exists
+    if (!userId) {
+      return res.status(400).json({ error: "userId is required" });
+    }
 
-    res.json(plants);
+    // 2. Check if userId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid User ID format" });
+    }
+
+    const plants = await UserPlant.find({
+  userId: new mongoose.Types.ObjectId(userId)
+}).populate("plantTypeId");
+    // 3. Always return an array, even if empty
+    res.json(plants || []);
+    
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// ADD a plant
-exports.addUserPlant = async (req, res) => {
-  try {
-    const newPlant = new UserPlant(req.body);
-    await newPlant.save();
-
-    res.status(201).json(newPlant);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// GET single plant
-exports.getUserPlantById = async (req, res) => {
-  try {
-    const plant = await UserPlant.findById(req.params.id)
-      .populate("plantTypeId");
-
-    res.json(plant);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Backend Error:", err); // Log the actual error to your terminal
+    res.status(500).json({ error: "Server error while fetching plants" });
   }
 };

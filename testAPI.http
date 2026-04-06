@@ -1,0 +1,3 @@
+# Fetch all user plants
+GET http://localhost:5000/userPlants?userId=69d391dfba96b583cacd69db
+Accept: application/json
