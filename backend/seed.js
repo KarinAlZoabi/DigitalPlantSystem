@@ -8,7 +8,6 @@ console.log("ENV TEST:", process.env.MONGO_URI);
 
 async function MasterSeed() {
   await mongoose.connect(process.env.MONGO_URI);
-  // await mongoose.connect("mongodb+srv://karinalzoabi_db_user:Td8zxCySXliMpAVa@digital-plant-care.g7zv21w.mongodb.net/?appName=digital-plant-care");
   
   // Clear collections 
   await User.deleteMany({});
