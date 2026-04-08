@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("../models/PlantType");
 const UserPlant = require("../models/UserPlant");
+const calculateHealthStatus = require("../calculateHealthStatus")
 
 exports.getUserPlants = async (req, res) => {
   try {
@@ -19,8 +20,15 @@ exports.getUserPlants = async (req, res) => {
     const plants = await UserPlant.find({
   userId: new mongoose.Types.ObjectId(userId)
 }).populate("plantTypeId");
+
+const formattedPlants = plants.map((plant) => ({
+    ...plant.toObject(),
+    healthStatus: calculateHealthStatus(
+      plant.careSchedule.watering.nextDue
+    ),
+  }));
     // 3. Always return an array, even if empty
-    res.json(plants || []);
+    res.json(formattedPlants || []);
     
   } catch (err) {
     console.error("Backend Error:", err); // Log the actual error to your terminal

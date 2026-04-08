@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { COLORS } from './styles/colors';
-import { userPlants } from './UserPlantData';
+// import { userPlants } from './UserPlantData';
 import { useParams } from 'react-router-dom';
 
 // Component Imports
-import UserDashboard from './components/userDashboard';
-import PlantDetails from './components/plantDetails';
-import Landing from './components/landing';
+import UserDashboard from './pages/user/userDashboard';
+import PlantDetails from './pages/user/plantDetails';
+import Landing from './pages/landing';
 
 const GlobalStyle = createGlobalStyle`
   body {

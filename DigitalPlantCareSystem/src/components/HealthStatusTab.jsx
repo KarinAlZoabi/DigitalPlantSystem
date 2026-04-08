@@ -1,7 +1,7 @@
 import { COLORS } from './../styles/colors';
-import HealthyBadge from "./../images/badges/Healthy.png"
-import CriticalBadge from "./../images/badges/Critical.png"
-import AttentionBadge from "./../images/badges/NeedsAttention.png"
+const HealthyBadge = "images/badges/Healthy.png"
+const CriticalBadge = "images/badges/Critical.png"
+const AttentionBadge = "images/badges/NeedsAttention.png"
 
 import { CurrentStatusSection,
     StatusBox,

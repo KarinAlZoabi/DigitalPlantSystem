@@ -1,7 +1,7 @@
-import { COLORS } from "../styles/colors";
+import { COLORS } from "../../styles/colors";
 import { useState, useEffect } from "react";
-import NavBar from "./general/NavBar";
-import PillSelector from "./general/pillSelector";
+import NavBar from "../../components/general/NavBar";
+import PillSelector from "../../components/general/pillSelector";
 import UserPlantCard from "./UserPlantCard";
 import {
   TopDiv,
@@ -10,24 +10,24 @@ import {
   PageSection,
   PlantGrid,
   FilterSection,
-} from "../styles/UserDashboardStyles";
-import HealthyBadge from "./../images/../images/badges/Healthy.png";
-import AttentionBadge from "./../images/../images/badges/NeedsAttention.png";
-import CriticalBadge from "./../images/../images/badges/Critical.png";
+} from "../../styles/UserDashboardStyles";
+const HealthyBadge = "images/badges/Healthy.png";
+const AttentionBadge = "images/badges/NeedsAttention.png";
+const CriticalBadge = "images/badges/Critical.png";
+
 export default function UserDashboard() {
   const [userPlants, setUserPlants] = useState([]);
   const [currentFilter, setCurrentFilter] = useState("all");
 
   useEffect(() => {
     // Replace with the ID generated when you ran your seed script
-    const userId = "69d391dfba96b583cacd69db"; 
-    
-    fetch(`http://localhost:5000/api/userPlants/?userId=${userId}`)
-      .then(res => res.json())
-      .then(data => setUserPlants(data))
-      .catch(err => console.error("Fetch error:", err));
-  }, []);
+    const userId = "69d62b400fac8233928ef8fd";
 
+    fetch(`http://localhost:5000/api/userPlants/?userId=${userId}`)
+      .then((res) => res.json())
+      .then((data) => setUserPlants(data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
 
   const stats = [
     {
@@ -36,26 +36,42 @@ export default function UserDashboard() {
     },
     {
       title: "Healthy",
-      number: userPlants.filter(p => p.healthStatus === "healthy").length,
+      number: userPlants.filter((p) => p.healthStatus === "healthy").length,
       badge: HealthyBadge,
     },
     {
       title: "Need Attention",
-      number: userPlants.filter(p => p.healthStatus === "attention").length,
+      number: userPlants.filter((p) => p.healthStatus === "attention").length,
       badge: AttentionBadge,
     },
     {
       title: "Critical",
-      number: userPlants.filter(p => p.healthStatus === "critical").length,
+      number: userPlants.filter((p) => p.healthStatus === "critical").length,
       badge: CriticalBadge,
     },
   ];
 
   const filterOptions = [
-    { id: "all", label: "All Plants", count: 6 },
-    { id: "healthy", label: "Healthy", count: 3 },
-    { id: "attention", label: "Attention", count: 2 },
-    { id: "critical", label: "Critical", count: 1 },
+    {
+      id: "all",
+      label: "All Plants",
+      count: userPlants.length,
+    },
+    {
+      id: "healthy",
+      label: "Healthy",
+      count: userPlants.filter((p) => p.healthStatus === "healthy").length,
+    },
+    {
+      id: "attention",
+      label: "Attention",
+      count: userPlants.filter((p) => p.healthStatus === "attention").length,
+    },
+    {
+      id: "critical",
+      label: "Critical",
+      count: userPlants.filter((p) => p.healthStatus === "critical").length,
+    },
   ];
 
   return (

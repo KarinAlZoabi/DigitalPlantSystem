@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { COLORS } from "../styles/colors";
-import NavBar from "./general/NavBar";
-import PillSelector from "./general/pillSelector";
+import { COLORS } from "../../styles/colors";
+import NavBar from "../../components/general/NavBar";
+import PillSelector from "../../components/general/pillSelector";
 import { useNavigate } from "react-router-dom";
 
-import CareInfoTab from "./careInfoTab";
-import GrowthTrackingTab from "./GrowthTrackingTab";
-import HealthStatusTab from "./HealthStatusTab";
+import CareInfoTab from "../../components/careInfoTab";
+import GrowthTrackingTab from "../../components/GrowthTrackingTab";
+import HealthStatusTab from "../../components/HealthStatusTab";
 
-import HealthyBadge from "./../images/badges/Healthy.png";
-import CriticalBadge from "./../images/badges/Critical.png";
-import AttentionBadge from "./../images/badges/NeedsAttention.png";
+const HealthyBadge = "images/badges/Healthy.png";
+const CriticalBadge = "images/badges/Critical.png";
+const AttentionBadge = "images/badges/NeedsAttention.png";
 
 import {
       PageContainer,
@@ -23,7 +23,7 @@ import {
     ActionButton,
     StatusBadge,
     BadgeIcon
-} from "./../styles/plantDetailsStyles"
+} from "../../styles/plantDetailsStyles"
 
 export default function PlantDetails({ userPlant }) {
   const [activeTab, setActiveTab] = useState("care");

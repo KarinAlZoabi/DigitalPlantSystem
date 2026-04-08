@@ -1,10 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLORS } from '../styles/colors';
-import HealthyBadge from "./../images/badges/Healthy.png"
-import CriticalBadge from "./../images/badges/Critical.png"
-import AttentionBadge from "./../images/badges/NeedsAttention.png"
+import { COLORS } from '../../styles/colors';
+const HealthyBadge = "images/badges/Healthy.png"
+const CriticalBadge = "images/badges/Critical.png"
+const AttentionBadge = "images/badges/NeedsAttention.png"
 import { useNavigate } from 'react-router-dom';
+
+function daysBetween(date) {
+  const today = new Date();
+  const target = new Date(date);
+
+  return Math.ceil(
+    (target - today) / (1000 * 60 * 60 * 24)
+  );
+}
 
 const STATUS_BADGES = {
   healthy: HealthyBadge,
@@ -114,9 +123,16 @@ const WaterButton = styled.button`
   &:hover { background-color: ${COLORS.primaryButtonHover}; }
 `;
 
+
 export default function UserPlantCard({ userPlant }) {
   const navigate = useNavigate();
   const { _id, nickname, plantTypeId, lastWatered, healthStatus, location } = userPlant;
+
+   const daysAgoWatered = Math.abs(daysBetween(lastWatered));
+
+  const daysUntilNextWater = daysBetween(
+    userPlant.careSchedule.watering.nextDue
+  );
 
   const handleCardClick = () => {
     // Navigates to a dynamic route like /plant/up-1
@@ -146,13 +162,17 @@ export default function UserPlantCard({ userPlant }) {
         <InfoRow iconColor="#3498db">
           <span className="material-symbols-outlined icon">water_drop</span>
           <span className="label">Last watered:</span>
-          <span className="value">2d ago</span> 
+          <span className="value">{daysAgoWatered}d ago</span>
         </InfoRow>
 
         <InfoRow iconColor="#2ecc71">
           <span className="material-symbols-outlined icon">calendar_today</span>
           <span className="label">Next watering:</span>
-          <span className="value">in 5d</span>
+          <span className="value">
+  {daysUntilNextWater >= 0
+    ? `in ${daysUntilNextWater}d`
+    : `${Math.abs(daysUntilNextWater)}d overdue`}
+</span>
         </InfoRow>
 
         <WaterButton>

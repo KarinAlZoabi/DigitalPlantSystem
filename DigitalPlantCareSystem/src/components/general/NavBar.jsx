@@ -1,6 +1,6 @@
 import React from "react";
-import Logo from "./../../images/logo/Logo.svg";
-import CalendarIcon from "./../../images/icons/calendar.svg";
+const Logo = "images/logo/Logo.svg";
+const CalendarIcon = "images/icons/calendar.svg";
 import { HeaderDiv, WrapperDiv, ButtonNav, ProfileButton } from "../../styles/NabvarStyles";
 function Navbar() {
   return (

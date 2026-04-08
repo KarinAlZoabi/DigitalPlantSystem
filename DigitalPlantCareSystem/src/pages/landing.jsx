@@ -1,9 +1,9 @@
 import { COLORS } from "../styles/colors";
-import Logo from "./../images/logo/Logo.svg";
-import HeroImg from "./../images/image 2.png";
-import CalendarIcon from "./../images/icons/calendar.svg";
-import HeartIcon from "./../images/icons/heart.svg";
-import ArrowUpIcon from "./../images/icons/arrow-trend-up.svg";
+const Logo = "images/logo/Logo.svg";
+const HeroImg = "images/image 2.png";
+const CalendarIcon = "images/icons/calendar.svg";
+const HeartIcon = "images/icons/heart.svg";
+const ArrowUpIcon = "images/icons/arrow-trend-up.svg";
 import "./../app.css"
 import {
   LoginBtn,
@@ -21,7 +21,7 @@ import {
   FeatureDescription,
   CTAsection,
   CTAbtn,
-} from "./../styles/landingStyles";
+} from "../styles/landingStyles";
 
 export default function Landing() {
   const features = [
