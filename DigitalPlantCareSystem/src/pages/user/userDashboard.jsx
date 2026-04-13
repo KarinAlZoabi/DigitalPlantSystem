@@ -21,7 +21,7 @@ export default function UserDashboard() {
 
   useEffect(() => {
     // Replace with the ID generated when you ran your seed script
-    const userId = "69d62b400fac8233928ef8fd";
+    const userId = "69da0e36052a5be610d86d7b";
 
     fetch(`http://localhost:5000/api/userPlants/?userId=${userId}`)
       .then((res) => res.json())

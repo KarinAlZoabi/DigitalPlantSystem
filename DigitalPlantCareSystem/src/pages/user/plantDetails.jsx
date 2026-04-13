@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { COLORS } from "../../styles/colors";
 import NavBar from "../../components/general/NavBar";
 import PillSelector from "../../components/general/pillSelector";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import CareInfoTab from "../../components/careInfoTab";
 import GrowthTrackingTab from "../../components/GrowthTrackingTab";
 import HealthStatusTab from "../../components/HealthStatusTab";
 
-const HealthyBadge = "images/badges/Healthy.png";
-const CriticalBadge = "images/badges/Critical.png";
-const AttentionBadge = "images/badges/NeedsAttention.png";
+const HealthyBadge = "/images/badges/Healthy.png";
+const CriticalBadge = "/images/badges/Critical.png";
+const AttentionBadge = "/images/badges/NeedsAttention.png";
 
 import {
       PageContainer,
@@ -26,10 +26,23 @@ import {
 } from "../../styles/plantDetailsStyles"
 
 export default function PlantDetails({ userPlant }) {
+  const { id } = useParams(); // Get ID from URL
+  const [plant, setPlant] = useState(null);
   const [activeTab, setActiveTab] = useState("care");
-  const { nickname, plantDetails, location, healthStatus } = userPlant;
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/userPlants/${id}`)
+      .then((res) => res.json())
+      .then((data) => setPlant(data))
+      .catch((err) => console.error("Error:", err));
+  }, [id]);
+
+  if (!plant) return <p>Loading...</p>;
+
+  const { nickname, plantTypeId, location, healthStatus } = plant;
+
+ 
 
   // Helper to get badge styling based on status
   const getStatusStyles = (status) => {
@@ -78,10 +91,10 @@ export default function PlantDetails({ userPlant }) {
 
         <DetailsGrid>
           <Sidebar>
-            <PlantImg src={plantDetails.imagePath} alt={nickname} />
+            <PlantImg src={plantTypeId.imagePath} alt={nickname} />
             <SidebarContent>
               <h1>{nickname}</h1>
-              <p className="scientific">{plantDetails.scientificName}</p>
+              <p className="scientific">{plantTypeId.scientificName}</p>
 
               {/* Dynamic Status Badge */}
               <StatusBadge
@@ -130,7 +143,7 @@ export default function PlantDetails({ userPlant }) {
               />
             </div>
             {/* Put the content logic back here! */}
-            {activeTab === "care" && <CareInfoTab plant={plantDetails} />}
+            {activeTab === "care" && <CareInfoTab plant={plant} />}
             {activeTab === "growth" && <GrowthTrackingTab />}
             {activeTab === "health" && (
               <HealthStatusTab currentStatus={healthStatus} />

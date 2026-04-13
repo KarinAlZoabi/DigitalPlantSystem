@@ -24,73 +24,85 @@ async function MasterSeed() {
   console.log("COPY THIS ID:", user._id);
 
   const plantTypes = await PlantType.insertMany([
-    {
-      name: "Monstera",
-      scientificName: "Monstera Deliciosa",
-      difficulty: "Easy",
-      imagePath: "/images/plants/Monstera-Deliciosa.jpg",
-      careRules: {
-        wateringFrequencyDays: 7,
-        fertilizingFrequencyDays: 30,
-        sunlight: "Bright indirect",
-      },
+  {
+    name: "Monstera",
+    scientificName: "Monstera Deliciosa",
+    description: "A tropical plant known for its large, split leaves. Perfect for indoor spaces.",
+    difficulty: "Easy",
+    imagePath: "/images/plants/Monstera-Deliciosa.jpg",
+    careRules: {
+      wateringFrequencyDays: 7,
+      fertilizingFrequencyDays: 30,
+      sunlight: "Bright indirect",
+      notes: "Avoid direct sunlight. Wipe leaves occasionally to keep them healthy.",
     },
-    {
-      name: "Snake Plant",
-      scientificName: "Dracaena Trifasciata",
-      difficulty: "Beginner",
-      imagePath: "/images/plants/Dracaena-Trifasciata.jpg",
-      careRules: {
-        wateringFrequencyDays: 14,
-        fertilizingFrequencyDays: 60,
-        sunlight: "Low",
-      },
+  },
+  {
+    name: "Snake Plant",
+    scientificName: "Dracaena Trifasciata",
+    description: "A hardy plant that tolerates low light and irregular watering.",
+    difficulty: "Beginner",
+    imagePath: "/images/plants/Dracaena-Trifasciata.jpg",
+    careRules: {
+      wateringFrequencyDays: 14,
+      fertilizingFrequencyDays: 60,
+      sunlight: "Low",
+      notes: "Do not overwater. Thrives on neglect.",
     },
-    {
-      name: "Fiddle Leaf Fig",
-      scientificName: "Ficus Lyrata",
-      difficulty: "Hard",
-      imagePath: "/images/plants/Ficus-Lyrata.jpg",
-      careRules: {
-        wateringFrequencyDays: 10,
-        fertilizingFrequencyDays: 30,
-        sunlight: "Bright indirect",
-      },
+  },
+  {
+    name: "Fiddle Leaf Fig",
+    scientificName: "Ficus Lyrata",
+    description: "A popular but sensitive plant with large violin-shaped leaves.",
+    difficulty: "Hard",
+    imagePath: "/images/plants/Ficus-Lyrata.jpg",
+    careRules: {
+      wateringFrequencyDays: 10,
+      fertilizingFrequencyDays: 30,
+      sunlight: "Bright indirect",
+      notes: "Keep in consistent conditions. Avoid moving it frequently.",
     },
-    {
-      name: "Lavender",
-      scientificName: "Lavandula Angustifolia",
-      difficulty: "Medium",
-      imagePath: "/images/plants/Lavandula-Angustifolia.jpg",
-      careRules: {
-        wateringFrequencyDays: 4,
-        fertilizingFrequencyDays: 45,
-        sunlight: "Full Sun",
-      },
+  },
+  {
+    name: "Lavender",
+    scientificName: "Lavandula Angustifolia",
+    description: "A fragrant outdoor plant known for its calming scent and purple flowers.",
+    difficulty: "Medium",
+    imagePath: "/images/plants/Lavandula-Angustifolia.jpg",
+    careRules: {
+      wateringFrequencyDays: 4,
+      fertilizingFrequencyDays: 45,
+      sunlight: "Full Sun",
+      notes: "Needs well-drained soil and plenty of sunlight.",
     },
-    {
-      name: "Golden Pothos",
-      scientificName: "Epipremnum Aureum",
-      difficulty: "Easy",
-      imagePath: "/images/plants/Epipremnum-Aureum.jpg",
-      careRules: {
-        wateringFrequencyDays: 7,
-        fertilizingFrequencyDays: 60,
-        sunlight: "Low",
-      },
+  },
+  {
+    name: "Golden Pothos",
+    scientificName: "Epipremnum Aureum",
+    description: "A fast-growing vine that adapts well to indoor environments.",
+    difficulty: "Easy",
+    imagePath: "/images/plants/Epipremnum-Aureum.jpg",
+    careRules: {
+      wateringFrequencyDays: 7,
+      fertilizingFrequencyDays: 60,
+      sunlight: "Low",
+      notes: "Very forgiving plant. Great for beginners.",
     },
-    {
-      name: "Aloe Vera",
-      scientificName: "Aloe Barbadensis Miller",
-      difficulty: "Easy",
-      imagePath: "/images/plants/Aloe-Barbadensis-Miller.jpg",
-      careRules: {
-        wateringFrequencyDays: 21,
-        fertilizingFrequencyDays: 90,
-        sunlight: "Bright Direct",
-      },
+  },
+  {
+    name: "Aloe Vera",
+    scientificName: "Aloe Barbadensis Miller",
+    description: "A succulent known for its medicinal gel and low maintenance needs.",
+    difficulty: "Easy",
+    imagePath: "/images/plants/Aloe-Barbadensis-Miller.jpg",
+    careRules: {
+      wateringFrequencyDays: 21,
+      fertilizingFrequencyDays: 90,
+      sunlight: "Bright Direct",
+      notes: "Let soil dry completely between watering.",
     },
-  ]);
+  },
+]);
 
   console.log("Plant Types Created");
 

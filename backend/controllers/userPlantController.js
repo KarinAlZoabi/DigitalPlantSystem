@@ -35,3 +35,30 @@ const formattedPlants = plants.map((plant) => ({
     res.status(500).json({ error: "Server error while fetching plants" });
   }
 };
+
+exports.getUserPlantById = async (req, res) => {
+  try {
+    const { id } = req.params; // Details page uses /api/userPlants/:id
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Valid Plant ID is required" });
+    }
+
+    const plant = await UserPlant.findById(id).populate("plantTypeId");
+
+    if (!plant) {
+      return res.status(404).json({ error: "Plant not found" });
+    }
+
+    // Apply the same health status logic here
+    const formattedPlant = {
+      ...plant.toObject(),
+      healthStatus: calculateHealthStatus(plant.careSchedule.watering.nextDue),
+    };
+
+    res.json(formattedPlant);
+  } catch (err) {
+    console.error("Backend Error:", err);
+    res.status(500).json({ error: "Server error while fetching plant details" });
+  }
+};

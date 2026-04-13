@@ -18,12 +18,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-// Wrapper to find the plant data based on URL ID
-function PlantDetailsWrapper() {
-  const { id } = useParams();
-  const plant = userPlants.find(p => p.id === id);
-  return plant ? <PlantDetails userPlant={plant} /> : <div>Plant not found</div>;
-}
+// // Wrapper to find the plant data based on URL ID
+// function PlantDetailsWrapper() {
+//   const { id } = useParams();
+//   const plant = userPlants.find(p => p.id === id);
+//   return plant ? <PlantDetails userPlant={plant} /> : <div>Plant not found</div>;
+// }
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
           <Route path="/" element={<UserDashboard />} />
           
           
-          <Route path="/plant/:id" element={<PlantDetailsWrapper />} />
+          <Route path="/plant/:id" element={<PlantDetails />} />
         </Routes>
       </BrowserRouter>
     </>

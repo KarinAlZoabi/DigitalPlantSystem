@@ -8,6 +8,6 @@ const {
 
 router.get("/", getUserPlants);
 // router.post("/", addUserPlant);
-// router.get("/:id", getUserPlantById);
+router.get("/:id", getUserPlantById);
 
 module.exports = router;

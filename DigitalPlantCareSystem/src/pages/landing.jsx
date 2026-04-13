@@ -1,6 +1,6 @@
 import { COLORS } from "../styles/colors";
 const Logo = "images/logo/Logo.svg";
-const HeroImg = "images/image 2.png";
+const HeroImg = "images/image_2.png";
 const CalendarIcon = "images/icons/calendar.svg";
 const HeartIcon = "images/icons/heart.svg";
 const ArrowUpIcon = "images/icons/arrow-trend-up.svg";
