@@ -1,3 +1,4 @@
+//Plant type model
 const mongoose = require("mongoose");
 
 const plantTypeSchema = new mongoose.Schema({

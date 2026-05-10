@@ -1,3 +1,4 @@
+//health status tab in plant details page
 import { COLORS } from './../styles/colors';
 const HealthyBadge = "/images/badges/Healthy.png"
 const CriticalBadge = "/images/badges/Critical.png"

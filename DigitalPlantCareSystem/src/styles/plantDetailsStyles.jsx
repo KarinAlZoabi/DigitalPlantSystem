@@ -5,8 +5,12 @@ const PageContainer = styled.div`
   background-color: ${COLORS.backgroundGreen};
   min-height: 100vh;
   padding: 20px 50px;
-`;
 
+  /* Responsive padding */
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+  }
+`;
 const BackButton = styled.button`
   background: none;
   border: none;
@@ -21,9 +25,15 @@ const BackButton = styled.button`
 
 const DetailsGrid = styled.div`
   display: grid;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: 400px 1fr; /* Sidebar fixed, content grows */
   gap: 40px;
   align-items: start;
+
+  /* Responsive Switch: Stack sidebar on top of content */
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
 `;
 
 const Sidebar = styled.div`
@@ -37,6 +47,9 @@ const PlantImg = styled.img`
   width: 100%;
   height: 300px;
   object-fit: cover;
+  @media (max-width: 768px) {
+    height: 250px; /* Shorter image on small phones */
+  }
 `;
 
 const SidebarContent = styled.div`
@@ -45,6 +58,9 @@ const SidebarContent = styled.div`
     margin: 0;
     font-size: 32px;
     color: ${COLORS.primaryText};
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
   }
   p.scientific {
     font-style: italic;
@@ -78,6 +94,15 @@ const ActionButton = styled.button`
     props.variant === "secondary"
       ? `2px solid ${COLORS.primaryButton}`
       : "none"};
+
+      &:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
 `;
 
 const StatusBadge = styled.div`

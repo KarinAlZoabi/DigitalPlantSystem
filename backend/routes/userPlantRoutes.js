@@ -1,13 +1,16 @@
+//user plant routes
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const {
-  getUserPlants,
-  addUserPlant,
-  getUserPlantById
+  getUserPlants, getUserPlantById, addUserPlant, markWatered, markFertilized, removeUserPlant
 } = require("../controllers/userPlantController");
 
-router.get("/", getUserPlants);
-// router.post("/", addUserPlant);
-router.get("/:id", getUserPlantById);
+router.get("/", auth, getUserPlants);
+router.post("/", auth, addUserPlant);
+router.get("/:id", auth, getUserPlantById);
+router.post("/:id/water", auth, markWatered);
+router.post("/:id/fertilize", auth, markFertilized);
+router.delete("/:id", auth, removeUserPlant);
 
 module.exports = router;

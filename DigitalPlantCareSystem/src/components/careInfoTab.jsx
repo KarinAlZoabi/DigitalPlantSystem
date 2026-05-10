@@ -1,3 +1,4 @@
+//care tab info in the plant details page
 import {
   InfoCard,
   ScheduleGrid,
@@ -9,60 +10,107 @@ import {
   PillTag,
 } from "./../styles/TabStyles";
 import { COLORS } from "./../styles/colors";
-import { daysBetween } from "../../../backend/dateHelpers";
-export default function CareInfoTab({ plant }) {
 
-  if (!plant || !plant.careSchedule) return <p>Loading care info...</p>;
+//date utilities
+function daysBetween(date) {
+  if (!date) return null;
+  return Math.ceil((new Date(date) - new Date()) / (1000 * 60 * 60 * 24));
+}
+function daysAgo(date) {
+  if (!date) return null;
+  return Math.floor((new Date() - new Date(date)) / (1000 * 60 * 60 * 24));
+}
 
-  const schedule = plant.careSchedule;
-  const species = plant.plantTypeId;
+export default function CareInfoTab({
+  plant,
+  careSchedule,
+  lastWatered,
+  lastFertilized,
+  isAdmin = false,
+}) {
+  if (!plant)
+    return <p style={{ color: COLORS.secondaryText }}>Loading care info...</p>;
 
-  const daysAgo = schedule.watering?.lastDone 
-    ? Math.abs(daysBetween(schedule.watering.lastDone)) 
-    : 0;
-  const daysUntil = schedule.watering?.nextDue 
-    ? daysBetween(schedule.watering.nextDue) 
-    : 0;
+  //calculate next watering and fertilizing dates
+  const nextWaterDays = careSchedule?.watering?.nextDue
+    ? daysBetween(careSchedule.watering.nextDue)
+    : null;
+  const nextFertDays = careSchedule?.fertilizing?.nextDue
+    ? daysBetween(careSchedule.fertilizing.nextDue)
+    : null;
+  const wateredAgo = daysAgo(lastWatered);
+  const fertAgo = daysAgo(lastFertilized);
+
+  //format day count to a user/friendly string
+  const formatNext = (days) => {
+    if (days === null) return "—";
+    if (days < 0) return `${Math.abs(days)}d overdue`;
+    if (days === 0) return "Today";
+    return `in ${days}d`;
+  };
+
   return (
     <>
       <InfoCard>
         <h3 style={{ marginTop: 0, marginBottom: 20 }}>Care Schedule</h3>
         <ScheduleGrid>
-          {/* Watering Box */}
+          {/* watering box */}
           <CareBox>
             <ScheduleHeader style={{ color: COLORS.iconBlue }}>
               <span className="material-symbols-outlined">water_drop</span>{" "}
               Watering
             </ScheduleHeader>
             <div style={{ color: COLORS.secondaryText }}>
-              Every {species?.careRules?.wateringFrequencyDays} days
+              Every {plant?.careRules?.wateringFrequencyDays} days
             </div>
-            <Row>
-              Last watered: <strong>{daysAgo}d ago</strong>
+            {!isAdmin && (<><Row>
+              Last watered:{" "}
+              <strong>
+                {wateredAgo !== null ? `${wateredAgo}d ago` : "—"}
+              </strong>
             </Row>
             <Row>
-              Next watering: <NextActionLabel>in {daysUntil}d</NextActionLabel>
+              Next watering:
+              <NextActionLabel
+                $overdue={nextWaterDays !== null && nextWaterDays < 0}
+              >
+                {formatNext(nextWaterDays)}
+              </NextActionLabel>
             </Row>
+            </>)}
+            
           </CareBox>
 
-          {/* Fertilizing Box */}
+          {/* fertilizing box */}
           <CareBox>
             <ScheduleHeader style={{ color: COLORS.iconGreen }}>
               <span className="material-symbols-outlined">eco</span> Fertilizing
             </ScheduleHeader>
             <div style={{ color: COLORS.secondaryText }}>
-              Every {species?.careRules?.fertilizingFrequencyDays} days
+              Every {plant?.careRules?.fertilizingFrequencyDays} days
             </div>
-            <Row>
-              Last fertilized: <strong>19d ago</strong>
+
+            {!isAdmin && (
+              <>
+               <Row>
+              Last fertilized:{" "}
+              <strong>{fertAgo !== null ? `${fertAgo}d ago` : "—"}</strong>
             </Row>
             <Row>
-              Next fertilizing: <NextActionLabel>in 11d</NextActionLabel>
-            </Row>
+              Next fertilizing:
+              <NextActionLabel
+                $overdue={nextFertDays !== null && nextFertDays < 0}
+              >
+                {formatNext(nextFertDays)}
+              </NextActionLabel>
+            </Row></>
+            )}
+           
           </CareBox>
         </ScheduleGrid>
       </InfoCard>
 
+      {/* plant info from original plant species */}
       <InfoCard>
         <h3 style={{ marginTop: 0 }}>Plant Information</h3>
         <p style={{ fontWeight: 600, marginBottom: 5 }}>Description</p>
@@ -73,9 +121,8 @@ export default function CareInfoTab({ plant }) {
             lineHeight: "1.5",
           }}
         >
-         {species?.description || plant.description}
+          {plant?.description || "No description available."}
         </p>
-
         <InfoGrid>
           <div>
             <p
@@ -94,7 +141,7 @@ export default function CareInfoTab({ plant }) {
               </span>
               <strong>Sunlight</strong>
             </p>
-            <PillTag>{species?.careRules?.sunlight}</PillTag>
+            <PillTag>{plant?.careRules?.sunlight}</PillTag>
           </div>
           <div>
             <p
@@ -113,16 +160,19 @@ export default function CareInfoTab({ plant }) {
               </span>
               <strong>Difficulty</strong>
             </p>
-            <PillTag>{species?.difficulty}</PillTag>
+            <PillTag>{plant?.difficulty}</PillTag>
           </div>
         </InfoGrid>
 
-        <div style={{ marginTop: 25 }}>
-          <p style={{ fontWeight: 600, marginBottom: 5 }}>Care Notes</p>
-          <p style={{ color: COLORS.secondaryText, fontSize: "0.95rem" }}>
-            {species?.careRules?.notes}
-          </p>
-        </div>
+        {/* extra care notes */}
+        {plant?.careRules?.notes && (
+          <div style={{ marginTop: 25 }}>
+            <p style={{ fontWeight: 600, marginBottom: 5 }}>Care Notes</p>
+            <p style={{ color: COLORS.secondaryText, fontSize: "0.95rem" }}>
+              {plant.careRules.notes}
+            </p>
+          </div>
+        )}
       </InfoCard>
     </>
   );

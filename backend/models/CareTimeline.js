@@ -1,3 +1,4 @@
+//Care timeline model
 const mongoose = require("mongoose");
 
 const careTimelineSchema = new mongoose.Schema({

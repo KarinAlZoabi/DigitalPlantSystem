@@ -1,18 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
-import { COLORS } from '../../styles/colors';
-const HealthyBadge = "images/badges/Healthy.png"
-const CriticalBadge = "images/badges/Critical.png"
-const AttentionBadge = "images/badges/NeedsAttention.png"
-import { useNavigate } from 'react-router-dom';
+//user plant card
+import React from "react";
+import styled from "styled-components";
+import { COLORS } from "../../styles/colors";
+const HealthyBadge = "images/badges/Healthy.png";
+const CriticalBadge = "images/badges/Critical.png";
+const AttentionBadge = "images/badges/NeedsAttention.png";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../api/api";
 
 function daysBetween(date) {
   const today = new Date();
   const target = new Date(date);
 
-  return Math.ceil(
-    (target - today) / (1000 * 60 * 60 * 24)
-  );
+  return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
 }
 
 const STATUS_BADGES = {
@@ -37,13 +37,14 @@ const Card = styled.div`
   margin: 0 auto;
 
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.12);
   }
-
 
   &:active {
     transform: translateY(-4px) scale(1.01);
@@ -53,15 +54,15 @@ const Card = styled.div`
 const ImageContainer = styled.div`
   height: 190px;
   width: 100%;
-  background-image: url(${props => props.src});
+  background-image: url(${(props) => props.src});
   background-size: cover;
   background-position: center;
 
   transition: transform 0.5s ease;
 
-
   ${Card}:hover & {
-    transform: scale(1.1);}
+    transform: scale(1.1);
+  }
 `;
 
 const Content = styled.div`
@@ -81,7 +82,6 @@ const TitleGroup = styled.div`
     margin: 0;
     font-size: 20px;
     color: #333;
-
   }
   span {
     font-style: italic;
@@ -98,9 +98,17 @@ const InfoRow = styled.div`
   color: #666;
   font-size: 15px;
 
-  .label { flex: 1; }
-  .value { font-weight: bold; color: #333; }
-  .icon { color: ${props => props.iconColor || '#888'}; font-size: 20px; }
+  .label {
+    flex: 1;
+  }
+  .value {
+    font-weight: bold;
+    color: #333;
+  }
+  .icon {
+    color: ${(props) => props.iconColor || "#888"};
+    font-size: 20px;
+  }
 `;
 
 const WaterButton = styled.button`
@@ -120,23 +128,31 @@ const WaterButton = styled.button`
   margin-top: 5px;
   transition: background 0.2s;
 
-  &:hover { background-color: ${COLORS.primaryButtonHover}; }
+  &:hover {
+    background-color: ${COLORS.primaryButtonHover};
+  }
 `;
 
-
-export default function UserPlantCard({ userPlant }) {
+export default function UserPlantCard({ userPlant, onWatered }) {
   const navigate = useNavigate();
-  const { _id, nickname, plantTypeId, lastWatered, healthStatus, location } = userPlant;
+  const { _id, nickname, plantTypeId, lastWatered, healthStatus, location } =
+    userPlant;
 
-   const daysAgoWatered = Math.abs(daysBetween(lastWatered));
+  const daysAgoWatered = Math.abs(daysBetween(lastWatered));
 
   const daysUntilNextWater = daysBetween(
-    userPlant.careSchedule.watering.nextDue
+    userPlant.careSchedule.watering.nextDue,
   );
 
   const handleCardClick = () => {
     // Navigates to a dynamic route like /plant/up-1
     navigate(`/plant/${_id}`);
+  };
+
+  const handleWater = async (e) => {
+    e.stopPropagation();
+    const updated = await api.markWatered(_id);
+    onWatered(updated);
   };
 
   return (
@@ -148,9 +164,9 @@ export default function UserPlantCard({ userPlant }) {
             <h2>{nickname}</h2>
             <span>{plantTypeId.scientificName}</span>
           </TitleGroup>
-          <BadgeImage 
-            src={STATUS_BADGES[healthStatus] || HealthyBadge} 
-            alt={healthStatus} 
+          <BadgeImage
+            src={STATUS_BADGES[healthStatus] || HealthyBadge}
+            alt={healthStatus}
           />
         </Header>
 
@@ -169,13 +185,13 @@ export default function UserPlantCard({ userPlant }) {
           <span className="material-symbols-outlined icon">calendar_today</span>
           <span className="label">Next watering:</span>
           <span className="value">
-  {daysUntilNextWater >= 0
-    ? `in ${daysUntilNextWater}d`
-    : `${Math.abs(daysUntilNextWater)}d overdue`}
-</span>
+            {daysUntilNextWater >= 0
+              ? `in ${daysUntilNextWater}d`
+              : `${Math.abs(daysUntilNextWater)}d overdue`}
+          </span>
         </InfoRow>
 
-        <WaterButton>
+        <WaterButton onClick={handleWater}>
           <span className="material-symbols-outlined">water_drop</span>
           Water Now
         </WaterButton>

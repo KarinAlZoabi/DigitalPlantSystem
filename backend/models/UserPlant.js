@@ -1,3 +1,4 @@
+//User plant model
 const mongoose = require("mongoose");
 
 const userPlantSchema = new mongoose.Schema({

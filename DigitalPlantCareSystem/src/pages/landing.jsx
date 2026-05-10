@@ -1,10 +1,12 @@
 import { COLORS } from "../styles/colors";
+import { Link } from "react-router-dom";
+
 const Logo = "images/logo/Logo.svg";
 const HeroImg = "images/image_2.png";
 const CalendarIcon = "images/icons/calendar.svg";
 const HeartIcon = "images/icons/heart.svg";
 const ArrowUpIcon = "images/icons/arrow-trend-up.svg";
-import "./../app.css"
+
 import {
   LoginBtn,
   LogoImg,
@@ -62,11 +64,15 @@ export default function Landing() {
   return (
     <>
       <header>
-        <HeaderDiv>
+        <HeaderDiv style={{ backgroundColor: '#ffffff' }}>
           <LogoImg src={Logo} alt="PlantCare Logo" />
           <div style={{ display: "flex", flexDirection: "row", gap: 30 }}>
-            <LoginBtn>Login</LoginBtn>
-            <ColoredBtn>Sign Up</ColoredBtn>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
+              <LoginBtn>Login</LoginBtn>
+            </Link>
+            <Link to="/signup" style={{ textDecoration: 'none' }}>
+              <ColoredBtn>Sign Up</ColoredBtn>
+            </Link>
           </div>
         </HeaderDiv>
       </header>
@@ -89,13 +95,17 @@ export default function Landing() {
               marginTop: 20,
             }}
           >
-            <ColoredBtn style={{ width: 140 }}>Get Started Free</ColoredBtn>
-            <LoginBtn>Login</LoginBtn>
+            <Link to="/signup" style={{ textDecoration: 'none' }}>
+              <ColoredBtn style={{ width: 140 }}>Get Started Free</ColoredBtn>
+            </Link>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
+              <LoginBtn>Login</LoginBtn>
+            </Link>
           </div>
         </HeroContent>
       </HeroSection>
 
-      <FeatureSection>
+      <FeatureSection style={{ backgroundColor: '#ffffff' }}>
         <div style={{ textAlign: "center" }}>
           <LandingMainText style={{ fontSize: "clamp(28px, 4vw, 35px)" }}>
             Everything You Need to Care for Your Plants
@@ -164,7 +174,9 @@ export default function Landing() {
               and healthy
             </LandingSubText>
           </div>
-          <CTAbtn>Create Free Account</CTAbtn>
+          <Link to="/signup" style={{ textDecoration: 'none' }}>
+            <CTAbtn>Create Free Account</CTAbtn>
+          </Link>
         </div>
       </CTAsection>
 

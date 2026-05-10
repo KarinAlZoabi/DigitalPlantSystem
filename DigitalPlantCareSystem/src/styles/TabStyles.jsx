@@ -37,8 +37,8 @@ const ScheduleHeader = styled.div`
 `;
 
 const NextActionLabel = styled.span`
-  background-color: ${COLORS.secondaryGreen};
-  color: ${COLORS.primaryGreen};
+  background-color: ${p => p.$overdue ? COLORS.criticalBg : COLORS.secondaryGreen};
+color: ${p => p.$overdue ? COLORS.criticalStroke : COLORS.primaryGreen};
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.85rem;
