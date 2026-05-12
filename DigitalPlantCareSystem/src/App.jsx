@@ -1,22 +1,23 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
-import { COLORS } from './styles/colors';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
+import { COLORS } from "./styles/colors";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 // Pages
-import Landing from './pages/landing';
-import Login from './pages/auth/login';
-import Signup from './pages/auth/signup';
-import ForgotPassword from './pages/auth/forgotPassword';
-import ResetPassword from './pages/auth/resetPassword';
-import UserDashboard from './pages/user/userDashboard';
-import PlantDetails from './pages/user/plantDetails';
-import CareSchedule from './pages/user/careSchedule';
-import Profile from './pages/profile';
-import AdminDashboard from './pages/admin/adminDashboard';
-import AdminDatabase from './pages/admin/adminDatabase';
-import AdminCareSchedule from './pages/admin/adminCareSchedule';
-import AdminPlantDetails from './pages/admin/adminPlantDetails';
+import Landing from "./pages/landing";
+import Login from "./pages/auth/login";
+import Signup from "./pages/auth/signup";
+import ForgotPassword from "./pages/auth/forgotPassword";
+import ResetPassword from "./pages/auth/resetPassword";
+import UserDashboard from "./pages/user/userDashboard";
+import PlantDetails from "./pages/user/plantDetails";
+import CareSchedule from "./pages/user/careSchedule";
+import Profile from "./pages/profile";
+import AdminDashboard from "./pages/admin/adminDashboard";
+import AdminDatabase from "./pages/admin/adminDatabase";
+import AdminCareSchedule from "./pages/admin/adminCareSchedule";
+import AdminPlantDetails from "./pages/admin/adminPlantDetails";
+import NotFound from "./pages/notFound";
 
 const GlobalStyle = createGlobalStyle`
   * { box-sizing: border-box; }
@@ -66,32 +67,109 @@ function App() {
           <Route path="/" element={<Landing />} />
 
           {/* Auth (public only) */}
-          <Route path="/login"           element={<PublicRoute><Login /></PublicRoute>} />
-          <Route path="/signup"          element={<PublicRoute><Signup /></PublicRoute>} />
-          <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
-          <Route path="/reset-password"  element={<PublicRoute><ResetPassword /></PublicRoute>} />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute>
+                <Signup />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <PublicRoute>
+                <ResetPassword />
+              </PublicRoute>
+            }
+          />
 
           {/* User (protected) */}
-          <Route path="/dashboard"     element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
-          <Route path="/plant/:id"     element={<ProtectedRoute><PlantDetails /></ProtectedRoute>} />
-          <Route path="/care-schedule" element={<ProtectedRoute><CareSchedule /></ProtectedRoute>} />
-          <Route path="/profile"       element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plant/:id"
+            element={
+              <ProtectedRoute>
+                <PlantDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/care-schedule"
+            element={
+              <ProtectedRoute>
+                <CareSchedule />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Admin */}
-          <Route path="/admin"                element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          <Route path="/admin/database"       element={<AdminRoute><AdminDatabase /></AdminRoute>} />
-          <Route path="/admin/care-schedule"  element={<AdminRoute><AdminCareSchedule /></AdminRoute>} />
           <Route
-  path="/admin/database/:id"
-  element={
-    <AdminRoute>
-      <AdminPlantDetails />
-    </AdminRoute>
-  }
-/>
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/database"
+            element={
+              <AdminRoute>
+                <AdminDatabase />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/care-schedule"
+            element={
+              <AdminRoute>
+                <AdminCareSchedule />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/database/:id"
+            element={
+              <AdminRoute>
+                <AdminPlantDetails />
+              </AdminRoute>
+            }
+          />
 
           {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

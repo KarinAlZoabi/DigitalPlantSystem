@@ -1,16 +1,79 @@
-# React + Vite
+# Digital Plant Care System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Digital Plant Care System is a full-stack web application that helps users manage and monitor the care of their plants. The system allows users to create accounts, add plants to their personal collection, track care tasks, view plant details, update profiles, and reset passwords. It also includes an admin dashboard for managing the plant database and care schedules.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### User Features
 
-## React Compiler
+- User registration and login
+- JWT-based authentication
+- Forgot password and reset password via email
+- User profile management
+- Profile picture upload
+- Add plants to personal collection
+- View plant details
+- Track plant care tasks
+- View upcoming care schedule
+- Delete account
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Admin Features
 
-## Expanding the ESLint configuration
+- Admin dashboard
+- View system statistics
+- Manage plant database
+- Add, edit, and delete plant types
+- Manage plant care rules
+- View care schedule information
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+### Frontend
+
+- React
+- Vite
+- React Router
+- Styled Components
+- CSS Modules / custom styles
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT authentication
+- bcryptjs
+- Nodemailer
+- Multer
+
+## Project Structure
+
+```txt
+DigitalPlantSystem/
+│
+├── DigitalPlantCareSystem/      # Frontend React application
+│   ├── public/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   ├── styles/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/                     # Backend Express application
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── server.js
+│   ├── seed.js
+│   └── package.json
+│
+├── package.json
+└── README.md

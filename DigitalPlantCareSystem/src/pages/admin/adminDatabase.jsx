@@ -24,7 +24,7 @@ import {
 import styled from "styled-components";
 import { COLORS } from "../../styles/colors";
 
-const BACKEND = "http://localhost:5000";
+const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 //initial state
 const emptyForm = {

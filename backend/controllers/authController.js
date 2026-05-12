@@ -173,29 +173,61 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    const requestId = crypto.randomBytes(4).toString("hex").toUpperCase();
 
-    // HTML Email Template
     await transporter.sendMail({
       from: `"PlantCare" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: "Reset your PlantCare password",
+
+      // This makes Gmail treat each reset email as a fresh thread
+      subject: `Reset your PlantCare password - ${requestId}`,
+
+      headers: {
+        "X-Entity-Ref-ID": requestId,
+        References: "",
+        "In-Reply-To": "",
+      },
+
       html: `
-        <div style="font-family:Poppins,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#ffffff;border-radius:16px;">
-          <h2 style="color:#3A7D5D;margin-bottom:8px;">Password Reset Request</h2>
-          <p style="color:#6B6B6B;font-size:15px;line-height:1.6;">
-            Hi ${user.name},<br/><br/>
-            We received a request to reset your PlantCare password. Click the button below to choose a new one.
-          </p>
-          <a href="${resetUrl}"
-             style="display:inline-block;margin-top:24px;padding:13px 28px;background:#3A7D5D;
-                    color:white;text-decoration:none;border-radius:10px;font-weight:600;font-size:15px;">
-            Reset Password
-          </a>
-          <p style="color:#9CA3AF;font-size:12px;margin-top:28px;line-height:1.5;">
-            This link expires in 1 hour. If you didn't request a password reset, you can safely ignore this email.
-          </p>
+  <div style="margin:0; padding:0; background:#f3f8f1; font-family:Arial, sans-serif;">
+    <div style="max-width:560px; margin:0 auto; padding:40px 20px;">
+      
+      <div style="background:#ffffff; border-radius:18px; padding:36px 28px; text-align:center; box-shadow:0 8px 24px rgba(47,107,79,0.12); border:1px solid #e1ecdf;">
+        
+        <div style="width:64px; height:64px; background:#e4f3e1; border-radius:50%; margin:0 auto 18px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:32px;">🌿</span>
         </div>
-      `,
+
+        <h2 style="margin:0 0 12px; color:#2f6b4f; font-size:26px; font-weight:700;">
+          Reset Your Password
+        </h2>
+
+        <p style="margin:0 0 20px; color:#4b5563; font-size:15px; line-height:1.6;">
+          Hi ${user.name},
+        </p>
+
+        <p style="margin:0 auto 26px; color:#4b5563; font-size:15px; line-height:1.7; max-width:420px;">
+          We received a request to reset your PlantCare password. Click the button below to create a new password.
+        </p>
+
+        <a href="${resetUrl}" 
+          style="display:inline-block; background:#2f6b4f; color:#ffffff; padding:13px 28px; border-radius:999px; text-decoration:none; font-size:15px; font-weight:700;">
+          Reset Password
+        </a>
+
+        <p style="margin:26px auto 0; color:#6b7280; font-size:13px; line-height:1.6; max-width:390px;">
+          This link expires in 1 hour. If you did not request this password reset, you can safely ignore this email.
+        </p>
+
+      </div>
+
+      <p style="text-align:center; color:#7c8b7a; font-size:12px; margin:20px 0 0;">
+        PlantCare · Helping your plants stay healthy
+      </p>
+
+    </div>
+  </div>
+`,
     });
 
     res.json({ message: "If this email exists, a reset link was sent." });
@@ -228,7 +260,7 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-// Delete Account 
+// Delete Account
 
 exports.deleteAccount = async (req, res) => {
   try {

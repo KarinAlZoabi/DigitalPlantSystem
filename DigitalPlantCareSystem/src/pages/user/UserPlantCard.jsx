@@ -1,6 +1,6 @@
 //user plant card
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { COLORS } from "../../styles/colors";
 const HealthyBadge = "images/badges/Healthy.png";
 const CriticalBadge = "images/badges/Critical.png";
@@ -110,7 +110,26 @@ const InfoRow = styled.div`
     font-size: 20px;
   }
 `;
+const waterWave = keyframes`
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  50% {
+    transform: translateX(0%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(100%) skewX(-15deg);
+  }
+`;
 
+const dropletBounce = keyframes`
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.08);
+  }
+`;
 const WaterButton = styled.button`
   width: 100%;
   background-color: ${COLORS.primaryButton};
@@ -126,14 +145,51 @@ const WaterButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   margin-top: 5px;
-  transition: background 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+  position: relative;
+  overflow: hidden;
+
+  .material-symbols-outlined {
+    position: relative;
+    z-index: 2;
+    animation: ${(props) => (props.$watering ? dropletBounce : "none")} 0.7s
+      ease-in-out infinite;
+  }
+
+  span,
+  .button-text {
+    position: relative;
+    z-index: 2;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateX(-100%) skewX(-15deg);
+    animation: ${(props) => (props.$watering ? waterWave : "none")} 1s
+      ease-in-out infinite;
+  }
 
   &:hover {
     background-color: ${COLORS.primaryButtonHover};
   }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.85;
+  }
 `;
 
 export default function UserPlantCard({ userPlant, onWatered }) {
+  const [isWatering, setIsWatering] = useState(false);
   const navigate = useNavigate();
   const { _id, nickname, plantTypeId, lastWatered, healthStatus, location } =
     userPlant;
@@ -151,8 +207,19 @@ export default function UserPlantCard({ userPlant, onWatered }) {
 
   const handleWater = async (e) => {
     e.stopPropagation();
-    const updated = await api.markWatered(_id);
-    onWatered(updated);
+
+    if (isWatering) return;
+
+    setIsWatering(true);
+
+    try {
+      const updated = await api.markWatered(_id);
+      onWatered(updated);
+    } catch (err) {
+      alert(err.message || "Failed to mark plant as watered.");
+    } finally {
+      setIsWatering(false);
+    }
   };
 
   return (
@@ -191,9 +258,15 @@ export default function UserPlantCard({ userPlant, onWatered }) {
           </span>
         </InfoRow>
 
-        <WaterButton onClick={handleWater}>
+        <WaterButton
+          onClick={handleWater}
+          disabled={isWatering}
+          $watering={isWatering}
+        >
           <span className="material-symbols-outlined">water_drop</span>
-          Water Now
+          <span className="button-text">
+            {isWatering ? "Watering..." : "Water Now"}
+          </span>
         </WaterButton>
       </Content>
     </Card>

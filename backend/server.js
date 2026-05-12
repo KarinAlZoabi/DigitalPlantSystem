@@ -8,7 +8,13 @@ const path = require("path");
 const app = express();
 
 //middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 //server images stored on the server so the frontend can display them in <img> tags
