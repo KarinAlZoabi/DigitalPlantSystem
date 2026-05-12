@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 //server images stored on the server so the frontend can display them in <img> tags
-app.use("/images/profile-pics", express.static(path.join(__dirname, "../../DigitalPlantCareSystem/public/images/profile-pics")));
+app.use("/images/profile-pics", express.static(path.join(__dirname, "../DigitalPlantCareSystem/public/images/profile-pics")));
 
 //routes
 const userPlantRoutes = require("./routes/userPlantRoutes");

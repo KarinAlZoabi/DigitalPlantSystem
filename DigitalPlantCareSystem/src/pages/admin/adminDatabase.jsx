@@ -316,7 +316,7 @@ export default function AdminDatabase() {
                     <Tag bg="#F0FDF4" color="#4CAF50">
                       {p.difficulty}
                     </Tag>
-                    <Tag>{p.location}</Tag>
+                    <Tag>{p.environment}</Tag>
                   </TagsRow>
                   <CareRow>
                     <CareItem>

@@ -104,14 +104,15 @@ export default function ForgotPassword() {
     e.preventDefault();
     setLoading(true);
     try {
-      await api.forgotPassword({ email });
-      setSent(true);
-    } catch {
-      setSent(true);
-    } finally {
-      // Always show success for security
-      setLoading(false);
-    }
+  const res = await api.forgotPassword({ email });
+  console.log("Forgot password response:", res);
+  setSent(true);
+} catch (err) {
+  console.error("Forgot password error:", err);
+  alert(err.message);
+} finally {
+  setLoading(false);
+}
   };
 
   return (
