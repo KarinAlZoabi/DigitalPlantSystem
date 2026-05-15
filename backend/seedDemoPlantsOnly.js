@@ -34,7 +34,7 @@ async function upsertPlantTypes() {
         "An elegant indoor plant with glossy green leaves and white flowers. It prefers consistent moisture and indirect light.",
       difficulty: "Easy",
       environment: "Indoor",
-      imagePath: DEFAULT_IMAGE,
+      imagePath: "/images/plants/Peace-Lily.jpg",
       careRules: {
         wateringFrequencyDays: 5,
         fertilizingFrequencyDays: 30,
@@ -50,7 +50,7 @@ async function upsertPlantTypes() {
         "A bold indoor plant with thick, shiny leaves. It grows well in bright indirect light and moderate watering.",
       difficulty: "Medium",
       environment: "Indoor",
-      imagePath: DEFAULT_IMAGE,
+      imagePath: "/images/plants/rubber.jpg",
       careRules: {
         wateringFrequencyDays: 8,
         fertilizingFrequencyDays: 35,
@@ -66,7 +66,7 @@ async function upsertPlantTypes() {
         "A lush fern with soft arching fronds. It enjoys humidity, regular watering, and indirect light.",
       difficulty: "Medium",
       environment: "Indoor",
-      imagePath: DEFAULT_IMAGE,
+      imagePath: "/images/plants/boston-fern.jpg",
       careRules: {
         wateringFrequencyDays: 3,
         fertilizingFrequencyDays: 30,
@@ -82,7 +82,7 @@ async function upsertPlantTypes() {
         "A decorative foliage plant known for large patterned leaves. It needs stable humidity and filtered light.",
       difficulty: "Hard",
       environment: "Indoor",
-      imagePath: DEFAULT_IMAGE,
+      imagePath: "/images/plants/Calathea.jpg",
       careRules: {
         wateringFrequencyDays: 4,
         fertilizingFrequencyDays: 30,
@@ -98,7 +98,7 @@ async function upsertPlantTypes() {
         "A succulent with thick oval leaves. It stores water and prefers bright light with infrequent watering.",
       difficulty: "Easy",
       environment: "Indoor/Outdoor",
-      imagePath: DEFAULT_IMAGE,
+      imagePath: "/images/plants/jade-plant.jpg",
       careRules: {
         wateringFrequencyDays: 18,
         fertilizingFrequencyDays: 60,
@@ -114,7 +114,7 @@ async function upsertPlantTypes() {
         "A fragrant herb that grows well outdoors in sunny conditions. It prefers well-drained soil.",
       difficulty: "Medium",
       environment: "Outdoor",
-      imagePath: DEFAULT_IMAGE,
+      imagePath: "/images/plants/rosemary.jpg",
       careRules: {
         wateringFrequencyDays: 6,
         fertilizingFrequencyDays: 45,
