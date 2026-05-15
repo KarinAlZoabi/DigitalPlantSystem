@@ -166,10 +166,14 @@ exports.forgotPassword = async (req, res) => {
       });
     }
 
-    // Create a unique token and set 1-hour expiration
+    // Create a raw token for the email link
     const token = crypto.randomBytes(32).toString("hex");
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000;
+
+    // Store only the hashed token in the database
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
@@ -242,21 +246,46 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        error: "Token and new password are required.",
+      });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        error: "Password must be at least 8 characters long.",
+      });
+    }
+
+    // Hash the token from the reset link and compare it with the hashed token in MongoDB
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
     const user = await User.findOne({
-      resetPasswordToken: token,
+      resetPasswordToken: hashedToken,
       resetPasswordExpires: { $gt: Date.now() },
     });
-    if (!user)
-      return res.status(400).json({ error: "Invalid or expired reset token" });
+
+    if (!user) {
+      return res.status(400).json({
+        error: "Invalid or expired reset token.",
+      });
+    }
 
     user.passwordHash = await bcrypt.hash(newPassword, 10);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
+
     await user.save();
 
-    res.json({ message: "Password reset successful" });
-  } catch {
-    res.status(500).json({ error: "Server error" });
+    return res.json({ message: "Password reset successful." });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    return res.status(500).json({ error: "Server error." });
   }
 };
 

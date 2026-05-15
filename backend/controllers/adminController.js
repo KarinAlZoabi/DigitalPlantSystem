@@ -7,10 +7,12 @@ exports.getStats = async (req, res) => {
   try {
     //get the total number of users in the database
     const totalUsers = await User.countDocuments({ role: "user" });
+    const normalUsers = await User.find({role: "user"}).select("_id");
+    const normalUserIds = normalUsers.map((user) => user._id);
     //get total plant types
     const totalPlantTypes = await PlantType.countDocuments();
     //get the total number of plants user have on their accounts
-    const totalUserPlants = await UserPlant.countDocuments();
+    const totalUserPlants = await UserPlant.countDocuments({userId: {$in: normalUserIds}});
     //calculate the average plant number by user
     const avgPlantsPerUser = totalUsers > 0 ? (totalUserPlants / totalUsers).toFixed(1) : 0;
     //filter recently added plants

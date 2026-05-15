@@ -481,7 +481,7 @@ export default function AdminDatabase() {
                     <option value="">Select</option>
                     <option value="Indoor">Indoor</option>
                     <option value="Outdoor">Outdoor</option>
-                    <option value="Both">Both</option>
+                    <option value="Both">Indoor/Outdoor</option>
                   </Select>
                 </Field>
                 <Field>
@@ -506,7 +506,6 @@ export default function AdminDatabase() {
                     onChange={onChange}
                   >
                     <option value="">Select</option>
-                    <option value="Beginner">Beginner</option>
                     <option value="Easy">Easy</option>
                     <option value="Medium">Medium</option>
                     <option value="Hard">Hard</option>
