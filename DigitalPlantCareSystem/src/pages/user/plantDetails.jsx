@@ -18,6 +18,10 @@ import {
   ActionButton,
   StatusBadge,
   BadgeIcon,
+  NicknameRow,
+  NicknameInput,
+  NicknameEditRow,
+  IconButton,
 } from "../../styles/plantDetailsStyles";
 import styled from "styled-components";
 
@@ -75,16 +79,31 @@ export default function PlantDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [plant, setPlant] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [activeTab, setActiveTab] = useState("care");
   const [actionLoading, setActionLoading] = useState("");
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [nicknameDraft, setNicknameDraft] = useState("");
+  const [nicknameLoading, setNicknameLoading] = useState(false);
 
   useEffect(() => {
-    api
-      .getUserPlantById(id)
-      .then(setPlant)
-      .catch(() => setPlant(null));
-  }, [id]);
+  setLoading(true);
+  setNotFound(false);
+
+  api
+    .getUserPlantById(id)
+    .then((data) => {
+      setPlant(data);
+      setNotFound(false);
+    })
+    .catch(() => {
+      setPlant(null);
+      setNotFound(true);
+    })
+    .finally(() => setLoading(false));
+}, [id]);
 
   const handleWater = async () => {
     setActionLoading("water");
@@ -110,28 +129,79 @@ export default function PlantDetails() {
     }
   };
 
+  const handleSaveNickname = async () => {
+    const cleanNickname = nicknameDraft.trim();
+
+    if (!cleanNickname) {
+      alert("Plant nickname is required.");
+      return;
+    }
+
+    if (cleanNickname.length < 2 || cleanNickname.length > 30) {
+      alert("Nickname must be between 2 and 30 characters.");
+      return;
+    }
+
+    setNicknameLoading(true);
+
+    try {
+      const updated = await api.updateUserPlantNickname(id, {
+        nickname: cleanNickname,
+      });
+
+      setPlant(updated);
+      setNicknameDraft(updated.nickname || "");
+      setIsEditingNickname(false);
+    } catch (e) {
+      alert(e.message || "Failed to update nickname.");
+    } finally {
+      setNicknameLoading(false);
+    }
+  };
+
+  const handleCancelNicknameEdit = () => {
+    setNicknameDraft(nickname || "");
+    setIsEditingNickname(false);
+  };
   const handleRemove = async () => {
     try {
       await api.removeUserPlant(id);
-      navigate("/");
+      navigate("/dashboard", {replace: true});
     } catch (e) {
       alert(e.message);
     }
   };
 
-  if (!plant)
-    return (
-      <>
-        <NavBar />
-        <PageContainer>
-          <BackButton onClick={() => navigate(-1)}>
-            <span className="material-symbols-outlined">arrow_back</span> Back
-            to My Plants
-          </BackButton>
-          <p style={{ color: COLORS.secondaryText }}>Loading plant details…</p>
-        </PageContainer>
-      </>
-    );
+ if (loading) {
+  return (
+    <>
+      <NavBar />
+      <PageContainer>
+        <BackButton onClick={() => navigate("/dashboard")}>
+          <span className="material-symbols-outlined">arrow_back</span>
+          Back to My Plants
+        </BackButton>
+        <p>Loading plant details…</p>
+      </PageContainer>
+    </>
+  );
+}
+
+if (notFound || !plant) {
+  return (
+    <>
+      <NavBar />
+      <PageContainer>
+        <BackButton onClick={() => navigate("/dashboard")}>
+          <span className="material-symbols-outlined">arrow_back</span>
+          Back to My Plants
+        </BackButton>
+        <h2>Plant not found</h2>
+        <p>This plant does not exist or may have been removed.</p>
+      </PageContainer>
+    </>
+  );
+}
 
   const {
     nickname,
@@ -163,7 +233,54 @@ export default function PlantDetails() {
           <Sidebar>
             <PlantImg src={plantTypeId?.imagePath} alt={nickname} />
             <SidebarContent>
-              <h1>{nickname}</h1>
+              {isEditingNickname ? (
+                <NicknameEditRow>
+                  <NicknameInput
+                    value={nicknameDraft}
+                    onChange={(e) => setNicknameDraft(e.target.value)}
+                    maxLength={30}
+                    autoFocus
+                  />
+
+                  <IconButton
+                    type="button"
+                    onClick={handleSaveNickname}
+                    disabled={nicknameLoading}
+                    title="Save nickname"
+                  >
+                    <span className="material-symbols-outlined">
+                      {nicknameLoading ? "hourglass_empty" : "check"}
+                    </span>
+                  </IconButton>
+
+                  <IconButton
+                    type="button"
+                    onClick={handleCancelNicknameEdit}
+                    disabled={nicknameLoading}
+                    title="Cancel"
+                  >
+                    <span className="material-symbols-outlined">close</span>
+                  </IconButton>
+                </NicknameEditRow>
+              ) : (
+                <NicknameRow>
+                  <h1>{nickname}</h1>
+
+                  <IconButton
+                    type="button"
+                    onClick={() => {
+                      setNicknameDraft(nickname || "");
+                      setIsEditingNickname(true);
+                    }}
+                    title="Edit nickname"
+                    aria-label="Edit nickname"
+                  >
+                    <span className="material-symbols-outlined">edit</span>
+                  </IconButton>
+                </NicknameRow>
+              )}
+
+           
               <p className="scientific">{plantTypeId?.scientificName}</p>
 
               <StatusBadge

@@ -127,6 +127,74 @@ const BadgeIcon = styled.img`
   border-radius: 50%;
 `;
 
+const NicknameRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  h1 {
+    margin: 0;
+  }
+`;
+
+const NicknameEditRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+`;
+
+const NicknameInput = styled.input`
+  border: 1.5px solid #d7e5d4;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1f2937;
+  min-width: 220px;
+  max-width: 360px;
+  width: min(100%, 360px);
+  outline: none;
+  background: #ffffff;
+
+  &:focus {
+    border-color: #2f6b4f;
+    box-shadow: 0 0 0 3px rgba(47, 107, 79, 0.12);
+  }
+`;
+
+const IconButton = styled.button`
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #eaf4e7;
+  color: #2f6b4f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: #d8ead3;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+  }
+`;
+
 export {
     PageContainer,
     BackButton,
@@ -136,5 +204,10 @@ export {
     SidebarContent,
     ActionButton,
     StatusBadge,
-    BadgeIcon
+    BadgeIcon,
+    NicknameRow,
+    NicknameInput,
+    NicknameEditRow,
+    IconButton
 }
+

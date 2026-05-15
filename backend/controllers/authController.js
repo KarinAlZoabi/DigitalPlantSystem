@@ -104,17 +104,45 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { name, email } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Name is required." });
+    }
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ error: "Valid email is required." });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const existingUser = await User.findOne({
+      email: normalizedEmail,
+      _id: { $ne: req.user.id },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        error: "This email is already taken.",
+      });
+    }
+
     const user = await User.findByIdAndUpdate(
       req.user.id,
-      { name, email },
-      { new: true },
+      {
+        name: name.trim(),
+        email: normalizedEmail,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     ).select("-passwordHash");
+
     res.json(user);
-  } catch {
-    res.status(500).json({ error: "Server error" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error." });
   }
 };
-
 //verify old pass and update to new hashed pass
 exports.changePassword = async (req, res) => {
   try {

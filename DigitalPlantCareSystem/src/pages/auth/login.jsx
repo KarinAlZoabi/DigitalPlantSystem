@@ -12,11 +12,11 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth(); // Global auth context method
 
-
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // --- VALIDATION LOGIC ---
   const validate = () => {
@@ -30,30 +30,30 @@ export default function Login() {
   // --- SUBMISSION ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Front-end validation check
     const errs = validate();
-    if (Object.keys(errs).length) { 
-      setErrors(errs); 
-      return; 
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
     }
 
-    setLoading(true); 
+    setLoading(true);
     setApiError("");
 
     try {
       const data = await api.login(form);
-      
+
       // Store token and user details in Context/LocalStorage
       login(data.token, data.user);
-      
+
       // Role-based routing: Admins go to panel, Users go to dashboard
       navigate(data.user.role === "admin" ? "/admin" : "/dashboard");
     } catch (err) {
       // Catch backend errors (Wrong password, user not found, etc.)
       setApiError(err.message || "An unexpected error occurred");
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +62,8 @@ export default function Login() {
       {/* Only visible on large screens */}
       <S.Left $bg={HeroImg}>
         <S.LeftQuote>
-          Your personal <span>plant care</span> assistant — never forget to water again.
+          Your personal <span>plant care</span> assistant — never forget to
+          water again.
         </S.LeftQuote>
       </S.Left>
 
@@ -79,15 +80,15 @@ export default function Login() {
             {/* EMAIL FIELD */}
             <S.FieldWrap>
               <S.Label>Email</S.Label>
-              <S.Input 
-                type="email" 
-                placeholder="you@example.com" 
+              <S.Input
+                type="email"
+                placeholder="you@example.com"
                 value={form.email}
                 $err={!!errors.email}
-                onChange={e => { 
-                  setForm({ ...form, email: e.target.value }); 
+                onChange={(e) => {
+                  setForm({ ...form, email: e.target.value });
                   setErrors({ ...errors, email: "" }); // Clear error on type
-                }} 
+                }}
               />
               {errors.email && <S.ErrText>{errors.email}</S.ErrText>}
             </S.FieldWrap>
@@ -95,16 +96,28 @@ export default function Login() {
             {/* PASSWORD FIELD */}
             <S.FieldWrap>
               <S.Label>Password</S.Label>
-              <S.Input 
-                type="password" 
-                placeholder="••••••••" 
-                value={form.password}
-                $err={!!errors.password}
-                onChange={e => { 
-                  setForm({ ...form, password: e.target.value }); 
-                  setErrors({ ...errors, password: "" }); 
-                }} 
-              />
+              <S.PasswordWrap>
+                <S.Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="******"
+                  value={form.password}
+                  $err={errors.password}
+                  onChange={(e) => {
+                    setForm({ ...form, password: e.target.value });
+                    setErrors({ ...errors, password: "" });
+                  }}
+                />
+
+                <S.EyeButton
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <span className="material-symbols-outlined">
+                    {showPassword ? "visibility_off" : "visibility"}
+                  </span>
+                </S.EyeButton>
+              </S.PasswordWrap>
               {errors.password && <S.ErrText>{errors.password}</S.ErrText>}
             </S.FieldWrap>
 

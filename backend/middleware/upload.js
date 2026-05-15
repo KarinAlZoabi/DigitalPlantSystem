@@ -40,8 +40,22 @@ const plantUpload = createUploader("UserUploadedPlants", (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
   cb(null, `plant_${Date.now()}${ext}`);
 });
+
+function handleUploadError(err, req, res, next) {
+  if (!err) return next();
+
+  if (err.code === "LIMIT_FILE_SIZE") {
+    return res.status(400).json({
+      error: "Image must be smaller than 5 MB.",
+    });
+  }
+
+  return res.status(400).json({
+    error: err.message || "Image upload failed.",
+  });
+}
 // Explicitly export as an object
 module.exports = { 
   profileUpload, 
-  plantUpload 
+  plantUpload, handleUploadError 
 };

@@ -74,7 +74,7 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
-  padding: 12px 14px;
+    padding: 12px 44px 12px 14px; 
   border-radius: 10px;
   /* Turns red if there is a validation error */
   border: 1.5px solid ${(p) => (p.$err ? "#e53e3e" : "#e2e8f0")};
@@ -142,4 +142,26 @@ export const AlertBox = styled.div`
   border-radius: 8px;
   font-size: 0.88rem;
   margin-bottom: 16px;
+`;
+
+export const PasswordWrap = styled.div`
+  position: relative;
+`;
+
+export const EyeButton = styled.button`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: ${COLORS.secondaryText};
+  display: flex;
+  align-items: center;
+  padding: 0;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
 `;

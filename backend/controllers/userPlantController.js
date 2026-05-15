@@ -72,7 +72,7 @@ exports.addUserPlant = async (req, res) => {
       userId,
       plantTypeId,
       nickname,
-      location: location || plantType.environment || "Indoor",
+      location: plantType.environment === "Outdoor"? "Outdoor" : "Indoor",
       healthStatus: "healthy",
       lastWatered: now,
       lastFertilized: now,
@@ -220,6 +220,54 @@ exports.markFertilized = async (req, res) => {
   }
 };
 
+// update plant nickname
+exports.updateUserPlantNickname = async (req, res) => {
+  try {
+    const { nickname } = req.body;
+
+    if (!nickname || !nickname.trim()) {
+      return res.status(400).json({ error: "Plant nickname is required." });
+    }
+
+    const cleanNickname = nickname.trim();
+
+    if (cleanNickname.length < 2 || cleanNickname.length > 30) {
+      return res.status(400).json({
+        error: "Nickname must be between 2 and 30 characters.",
+      });
+    }
+
+    const plant = await UserPlant.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user.id,
+      },
+      {
+        nickname: cleanNickname,
+      },
+      {
+        new: true,
+      }
+    ).populate("plantTypeId");
+
+    if (!plant) {
+      return res.status(404).json({ error: "Plant not found." });
+    }
+
+    const result = {
+      ...plant.toObject(),
+      healthStatus: calculateHealthStatus(
+        plant.careSchedule?.watering?.nextDue
+      ),
+    };
+
+    res.json(result);
+  } catch (err) {
+    console.error("Update nickname error:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+};
+
 //remove plant from user collection
 exports.removeUserPlant = async (req, res) => {
   try {
@@ -240,3 +288,4 @@ exports.removeUserPlant = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+

@@ -95,6 +95,71 @@ const styles = `
   .cs-cal-detail { background: white; border-radius: 14px; border: 1px solid #c8e6d0; padding: 20px 24px; box-shadow: 0 2px 12px rgba(40,100,60,0.08); }
   .cs-cal-detail-title { font-family: 'Poppins', sans-serif; font-size: 16px; color: #1a3a2a; font-weight: 600; margin-bottom: 14px; }
   .cs-empty-state { color: #8aab96; font-size: 14px; text-align: center; padding: 20px 0; }
+  @media (max-width: 700px) {
+  .cs-task-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .cs-task-left {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .cs-task-name {
+    flex-wrap: wrap;
+    line-height: 1.35;
+  }
+
+  .cs-mark-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+  @media (max-width: 760px) {
+  .cs-cal-wrap {
+    overflow-x: auto;
+  }
+
+  .cs-cal-grid {
+    min-width: 720px;
+  }
+
+  .cs-cal-nav {
+    padding: 16px 16px 0;
+    gap: 12px;
+  }
+
+  .cs-cal-header {
+    font-size: 18px;
+  }
+
+  .cs-cal-cell {
+    min-height: 72px;
+  }
+
+  .cs-cal-detail {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cs-view-toggle {
+    width: 100%;
+  }
+
+  .cs-view-btn {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .cs-page-title {
+    font-size: 24px;
+  }
+}
 `;
 
 const MONTH_NAMES = [

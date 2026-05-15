@@ -40,39 +40,87 @@ const emptyForm = {
 };
 
 //delete confirmation modal
-const ConfirmOverlay = ({ plant, onConfirm, onCancel }) => (
-  <Overlay onMouseDown={onCancel}>
-    <Modal style={{ maxWidth: 400 }} onMouseDown={(e) => e.stopPropagation()}>
-      <div style={{ textAlign: "center", padding: "16px 0 8px" }}>
-        <span
-          className="material-symbols-outlined"
-          style={{ fontSize: 48, color: `${COLORS.critical}` }}
-        >
-          warning
-        </span>
-        <ModalTitle style={{ marginTop: 12 }}>
-          Delete "{plant.name}"?
-        </ModalTitle>
-        <ModalSubTitle style={{ marginTop: 6 }}>
-          This plant type will be permanently removed. It cannot be deleted if
-          users currently own it.
-        </ModalSubTitle>
-        <Actions style={{ justifyContent: "center", marginTop: 20 }}>
-          <CancelBtn type="button" onClick={onCancel}>
-            Cancel
-          </CancelBtn>
-          <PrimaryBtn
-            type="button"
-            onClick={onConfirm}
-            style={{ background: `${COLORS.deleteButton}` }}
+const ConfirmOverlay = ({ plant, onConfirm, onCancel }) => {
+  const [deleteText, setDeleteText] = useState("");
+
+  const canDelete = deleteText === "DELETE";
+
+  return (
+    <Overlay onMouseDown={onCancel}>
+      <Modal style={{ maxWidth: 420 }} onMouseDown={(e) => e.stopPropagation()}>
+        <div style={{ textAlign: "center", padding: "16px 0 8px" }}>
+          <span
+            className="material-symbols-outlined"
+            style={{ fontSize: 48, color: COLORS.deleteButton }}
           >
-            Delete
-          </PrimaryBtn>
-        </Actions>
-      </div>
-    </Modal>
-  </Overlay>
-);
+            warning
+          </span>
+
+          <ModalTitle style={{ marginTop: 12 }}>
+            Delete "{plant.name}"?
+          </ModalTitle>
+
+          <ModalSubTitle style={{ marginTop: 6 }}>
+            This plant type will be permanently removed. It cannot be deleted if
+            users currently own it.
+          </ModalSubTitle>
+
+          <div
+            style={{
+              color: COLORS.primaryText,
+              fontSize: "0.9rem",
+              marginTop: 18,
+              marginBottom: 10,
+            }}
+          >
+            Type{" "}
+            <strong style={{ color: COLORS.deleteButton, letterSpacing: 0.5 }}>
+              DELETE
+            </strong>{" "}
+            to confirm.
+          </div>
+
+          <input
+            value={deleteText}
+            onChange={(e) => setDeleteText(e.target.value)}
+            placeholder="Type DELETE"
+            autoFocus
+            style={{
+              width: "100%",
+              border: "1.5px solid #e5e7eb",
+              borderRadius: 12,
+              padding: "11px 14px",
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "0.95rem",
+              outline: "none",
+              marginBottom: 20,
+              textAlign: "center",
+            }}
+          />
+
+          <Actions style={{ justifyContent: "center", marginTop: 8 }}>
+            <CancelBtn type="button" onClick={onCancel}>
+              Cancel
+            </CancelBtn>
+
+            <PrimaryBtn
+              type="button"
+              onClick={onConfirm}
+              disabled={!canDelete}
+              style={{
+                background: canDelete ? COLORS.deleteButton : "#fca5a5",
+                cursor: canDelete ? "pointer" : "not-allowed",
+                opacity: canDelete ? 1 : 0.65,
+              }}
+            >
+              Delete
+            </PrimaryBtn>
+          </Actions>
+        </div>
+      </Modal>
+    </Overlay>
+  );
+};
 
 export default function AdminDatabase() {
   const navigate = useNavigate();
@@ -307,7 +355,7 @@ export default function AdminDatabase() {
         ) : (
           <CardsGrid>
             {plants.map((p) => (
-              <PlantCard key={p._id} onClick={() => navigate(`/admin/database/${p._id}`)}>
+              <PlantCard key={p._id} onClick={(e) => {if (e.target.closest("button")) return; navigate(`/admin/database/${p._id}`)}}>
                 <PlantImage src={resolveImage(p.imagePath)} />
                 <PlantBody>
                   <PlantName>{p.name}</PlantName>
@@ -340,10 +388,10 @@ export default function AdminDatabase() {
                   </CareRow>
                   <Desc>{p.description}</Desc>
                   <ButtonsRow>
-                    <EditBtn onClick={() => onEdit(p)}>
+                    <EditBtn onClick={(e) => {e.stopPropagation; e.preventDefault; onEdit(p);}}>
                       <span class="material-symbols-outlined">edit</span> Edit
                     </EditBtn>
-                    <DeleteBtn onClick={() => setDeleteTarget(p)}>
+                    <DeleteBtn onClick={(e) => {e.stopPropagation; e.preventDefault; setDeleteTarget(p)}}>
                       <span class="material-symbols-outlined">delete</span>{" "}
                       Delete
                     </DeleteBtn>
@@ -403,7 +451,7 @@ export default function AdminDatabase() {
                   />
                 </Field>
                 <Field>
-                  <Label>Scientific Name</Label>
+                  <Label>Scientific Name *</Label>
                   <TextInput
                     name="scientific"
                     value={form.scientific}
@@ -414,7 +462,7 @@ export default function AdminDatabase() {
               </Grid2>
 
               <Field>
-                <Label>Description</Label>
+                <Label>Description *</Label>
                 <TextArea
                   name="description"
                   value={form.description}
@@ -476,7 +524,7 @@ export default function AdminDatabase() {
 
               <Grid3>
                 <Field>
-                  <Label>Type</Label>
+                  <Label>Type *</Label>
                   <Select name="type" value={form.type} onChange={onChange}>
                     <option value="">Select</option>
                     <option value="Indoor">Indoor</option>
@@ -485,7 +533,7 @@ export default function AdminDatabase() {
                   </Select>
                 </Field>
                 <Field>
-                  <Label>Sunlight</Label>
+                  <Label>Sunlight *</Label>
                   <Select
                     name="sunlight"
                     value={form.sunlight}
@@ -499,7 +547,7 @@ export default function AdminDatabase() {
                   </Select>
                 </Field>
                 <Field>
-                  <Label>Difficulty</Label>
+                  <Label>Difficulty *</Label>
                   <Select
                     name="difficulty"
                     value={form.difficulty}

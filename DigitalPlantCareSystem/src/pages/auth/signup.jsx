@@ -11,6 +11,8 @@ const HeroImg = "images/scott-webb-hDyO6rr3kqk-unsplash.jpg";
 export default function Signup() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // --- STATE MANAGEMENT ---
   const [form, setForm] = useState({
@@ -29,11 +31,11 @@ export default function Signup() {
     if (!form.name.trim()) e.name = "Name is required";
     if (!form.email) e.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Invalid email format";
-    
+
     if (!form.password) e.password = "Password is required";
     else if (form.password.length < 6)
       e.password = "Password must be at least 6 characters";
-    
+
     // Checks if the re-typed password matches the original
     if (form.password !== form.confirm) e.confirm = "Passwords do not match";
     return e;
@@ -49,7 +51,7 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
-    
+
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
@@ -68,7 +70,7 @@ export default function Signup() {
 
       // Automatically log the user in with the returned token
       login(data.token, data.user);
-      
+
       // Redirect based on role
       navigate(data.user.role === "admin" ? "/admin" : "/dashboard");
     } catch (err) {
@@ -124,25 +126,59 @@ export default function Signup() {
 
             <S.FieldWrap>
               <S.Label>Password</S.Label>
-              <S.Input
-                type="password"
-                placeholder="Min. 6 characters"
-                value={form.password}
-                $err={!!errors.password}
-                onChange={set("password")}
-              />
+
+              <S.PasswordWrap>
+                <S.Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Min. 6 characters"
+                  value={form.password}
+                  $err={errors.password}
+                  onChange={(e) => {
+                    setForm({ ...form, password: e.target.value });
+                    setErrors({ ...errors, password: "" });
+                  }}
+                />
+
+                <S.EyeButton
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <span className="material-symbols-outlined">
+                    {showPassword ? "visibility_off" : "visibility"}
+                  </span>
+                </S.EyeButton>
+              </S.PasswordWrap>
               {errors.password && <S.ErrText>{errors.password}</S.ErrText>}
             </S.FieldWrap>
 
             <S.FieldWrap>
               <S.Label>Confirm Password</S.Label>
-              <S.Input
-                type="password"
-                placeholder="Repeat your password"
-                value={form.confirm}
-                $err={!!errors.confirm}
-                onChange={set("confirm")}
-              />
+
+              <S.PasswordWrap>
+                <S.Input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Repeat your password"
+                  value={form.confirm}
+                  $err={!!errors.confirm}
+                  onChange={set("confirm")}
+                />
+
+                <S.EyeButton
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  aria-label={
+                    showConfirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
+                >
+                  <span className="material-symbols-outlined">
+                    {showConfirmPassword ? "visibility_off" : "visibility"}
+                  </span>
+                </S.EyeButton>
+              </S.PasswordWrap>
+
               {errors.confirm && <S.ErrText>{errors.confirm}</S.ErrText>}
             </S.FieldWrap>
 

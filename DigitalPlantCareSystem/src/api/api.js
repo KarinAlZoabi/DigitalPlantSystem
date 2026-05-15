@@ -91,6 +91,11 @@ export const api = {
   addUserPlant: (body) => request("/userPlants", { method: "POST", body: JSON.stringify(body) }),
   markWatered: (id) => request(`/userPlants/${id}/water`, { method: "POST" }),
   markFertilized: (id) => request(`/userPlants/${id}/fertilize`, { method: "POST" }),
+  updateUserPlantNickname: (id, body) =>
+  request(`/userPlants/${id}/nickname`, {
+    method: "PUT",
+    body: JSON.stringify(body),
+  }),
   removeUserPlant: (id) => request(`/userPlants/${id}`, { method: "DELETE" }),
 
   // Care Tasks

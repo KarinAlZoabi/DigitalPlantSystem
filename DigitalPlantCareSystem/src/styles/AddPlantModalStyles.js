@@ -267,3 +267,12 @@ export const EmptyMsg = styled.div`
   padding: 40px 0;
   font-size: 0.92rem;
 `;
+export const InfoText = styled.p`
+  margin: 6px 0;
+  color: #6b7280;
+  font-size: 13px;
+
+  strong {
+    color: #2f6b4f;
+  }
+`;

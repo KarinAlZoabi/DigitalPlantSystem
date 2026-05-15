@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const adminOnly = require("../middleware/adminOnly");
-const { plantUpload } = require("../middleware/upload");
+const { plantUpload, handleUploadError } = require("../middleware/upload");
 const {
   getAllPlantTypes,
   getPlantTypeById,
@@ -16,8 +16,8 @@ router.get("/", auth, getAllPlantTypes);
 router.get("/:id", auth, getPlantTypeById);
 
 
-router.post("/", auth, adminOnly, plantUpload.single("image"), createPlantType);
-router.put("/:id", auth, adminOnly, plantUpload.single("image"), updatePlantType);
+router.post("/", auth, adminOnly, plantUpload.single("image"), handleUploadError, createPlantType);
+router.put("/:id", auth, adminOnly, plantUpload.single("image"), handleUploadError, updatePlantType);
 
 router.delete("/:id", auth, adminOnly, deletePlantType);
 
