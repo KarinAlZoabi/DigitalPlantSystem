@@ -2,13 +2,17 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const path = require("path");
-const fs = require("fs");
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
 const UserPlant = require("../models/UserPlant");
 const CareTask = require("../models/CareTask");
 const CareTimeline = require("../models/CareTimeline");
+
+const {
+  uploadBufferToGridFS,
+  deleteGridFSFile,
+  buildFileUrl,
+} = require("../utils/gridfs");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -135,7 +139,7 @@ exports.updateProfile = async (req, res) => {
       {
         new: true,
         runValidators: true,
-      }
+      },
     ).select("-passwordHash");
 
     res.json(user);
@@ -161,26 +165,46 @@ exports.changePassword = async (req, res) => {
 };
 
 // Profile Picture uploads
-
 exports.uploadProfilePicture = async (req, res) => {
-  try {
-    if (!req.file) return res.status(400).json({ error: "No image uploaded" });
+  let uploadedFile = null;
 
-    // Build a URL the frontend can use directly in an <img> src
-    const picturePath = `/images/profile-pics/${req.file.filename}`;
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
+    const existingUser = await User.findById(req.user.id);
+
+    uploadedFile = await uploadBufferToGridFS(req.file, {
+      type: "profile-picture",
+      userId: req.user.id,
+    });
+
+    const profilePictureUrl = buildFileUrl(req, uploadedFile.fileId);
 
     const user = await User.findByIdAndUpdate(
       req.user.id,
-      { profilePicture: picturePath },
+      {
+        profilePicture: profilePictureUrl,
+        profilePictureFileId: uploadedFile.fileId,
+      },
       { new: true },
     ).select("-passwordHash");
 
+    if (existingUser?.profilePictureFileId) {
+      await deleteGridFSFile(existingUser.profilePictureFileId);
+    }
+
     res.json({ profilePicture: user.profilePicture });
-  } catch {
+  } catch (err) {
+    if (uploadedFile?.fileId) {
+      await deleteGridFSFile(uploadedFile.fileId);
+    }
+
+    console.error("Profile picture upload error:", err);
     res.status(500).json({ error: "Server error" });
   }
 };
-
 // Password recovery
 
 exports.forgotPassword = async (req, res) => {
@@ -288,10 +312,7 @@ exports.resetPassword = async (req, res) => {
     }
 
     // Hash the token from the reset link and compare it with the hashed token in MongoDB
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(token)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await User.findOne({
       resetPasswordToken: hashedToken,
@@ -324,16 +345,8 @@ exports.deleteAccount = async (req, res) => {
     const userId = req.user.id;
     const user = await User.findById(userId);
 
-    if (user?.profilePicture) {
-      const absolutePath = path.join(
-        __dirname,
-        "../../DigitalPlantCareSystem/public",
-        user.profilePicture,
-      );
-
-      if (fs.existsSync(absolutePath)) {
-        fs.unlinkSync(absolutePath);
-      }
+    if (user?.profilePictureFileId) {
+      await deleteGridFSFile(user.profilePictureFileId);
     }
 
     await CareTimeline.deleteMany({ userId });

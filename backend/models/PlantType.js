@@ -1,4 +1,5 @@
 // Plant type model
+
 const mongoose = require("mongoose");
 
 const plantTypeSchema = new mongoose.Schema(
@@ -69,6 +70,11 @@ const plantTypeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Plant image is required."],
       trim: true,
+    },
+
+    imageFileId: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }

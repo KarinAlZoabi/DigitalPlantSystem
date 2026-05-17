@@ -5,7 +5,7 @@ const { rateLimit } = require("express-rate-limit");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
-const { profileUpload } = require("../middleware/upload");
+const { profileUpload, handleUploadError } = require("../middleware/upload");
 
 const {
   register,
@@ -53,6 +53,7 @@ router.post(
   "/profile-picture",
   auth,
   profileUpload.single("picture"),
+  handleUploadError,
   uploadProfilePicture
 );
 

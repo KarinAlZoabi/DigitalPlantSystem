@@ -1,13 +1,17 @@
-//server file
+// Server file
+
 require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
 
 const app = express();
 
-//middleware
+// Important on Render so req.protocol becomes https instead of http
+app.set("trust proxy", 1);
+
+// Middleware
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
@@ -15,34 +19,43 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
 
-//server images stored on the server so the frontend can display them in <img> tags
-app.use("/images/profile-pics", express.static(path.join(__dirname, "../DigitalPlantCareSystem/public/images/profile-pics")));
-
-//routes
+// Routes
 const userPlantRoutes = require("./routes/userPlantRoutes");
 const authRoutes = require("./routes/authRoutes");
 const plantTypeRoutes = require("./routes/plantTypeRoutes");
 const careTaskRoutes = require("./routes/careTaskRoutes");
 const careTimelineRoutes = require("./routes/careTimelineRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const fileRoutes = require("./routes/fileRoutes");
 
-//register the routes with specific URl prefixes
+// Health check
+app.get("/", (req, res) => {
+  res.send("Digital Plant Care API is running");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ ok: true });
+});
+
+// Register routes
 app.use("/api/userPlants", userPlantRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/plantTypes", plantTypeRoutes);
 app.use("/api/careTasks", careTaskRoutes);
 app.use("/api/careTimeline", careTimelineRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/files", fileRoutes);
 
-//Database connection
+// Database connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))
   .catch((err) => console.error("MongoDB connection error ❌", err));
 
-//server initialization
+// Server initialization
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

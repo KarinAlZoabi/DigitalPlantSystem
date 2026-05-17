@@ -529,7 +529,7 @@ export default function AdminDatabase() {
                     <option value="">Select</option>
                     <option value="Indoor">Indoor</option>
                     <option value="Outdoor">Outdoor</option>
-                    <option value="Both">Indoor/Outdoor</option>
+                    <option value="Indoor/Outdoor">Indoor/Outdoor</option>
                   </Select>
                 </Field>
                 <Field>
