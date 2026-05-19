@@ -391,6 +391,18 @@ exports.googleAuth = async (req, res) => {
   try {
     const { credential } = req.body;
 
+    if (!process.env.GOOGLE_CLIENT_ID) {
+  return res.status(500).json({
+    error: "GOOGLE_CLIENT_ID is missing on Render backend.",
+  });
+}
+
+if (!process.env.JWT_SECRET) {
+  return res.status(500).json({
+    error: "JWT_SECRET is missing on Render backend.",
+  });
+}
+
     if (!credential) {
       return res.status(400).json({ error: "Google credential is required" });
     }
@@ -442,8 +454,11 @@ exports.googleAuth = async (req, res) => {
       token,
       user: formatUser(user),
     });
-  } catch (error) {
+ } catch (error) {
     console.error("Google auth error:", error);
-    return res.status(401).json({ error: "Google authentication failed" });
+
+    return res.status(400).json({
+      error: error.message || "Google authentication failed",
+    });
   }
 };
