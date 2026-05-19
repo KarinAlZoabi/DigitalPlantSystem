@@ -299,16 +299,34 @@ export const Overlay = styled.div`
   display: grid;
   place-items: center;
   z-index: 9999;
-  padding: 20px;
+
+  padding: 16px;
+  box-sizing: border-box;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 export const Modal = styled.div`
-  width: min(732px, 96vw);
-  max-height: calc(100vh - 60px);
+  width: min(732px, calc(100vw - 32px));
+  max-width: 100%;
+  max-height: calc(100dvh - 32px);
+
   overflow-y: auto;
-  background: #ffffff;
+  overflow-x: hidden;
+
+  box-sizing: border-box;
+  background: #fff;
   border-radius: 20px;
   padding: 20px 20px 16px;
+  margin: auto;
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+    padding: 16px 14px;
+    border-radius: 16px;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -440,6 +458,11 @@ export const Actions = styled.div`
   justify-content: flex-end;
   gap: 14px;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
 `;
 
 export const CancelBtn = styled.button`
@@ -452,6 +475,10 @@ export const CancelBtn = styled.button`
   font-size: 16px;
   font-weight: 400;
   color: #2e2e2e;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 export const PrimaryBtn = styled.button`
@@ -464,6 +491,10 @@ export const PrimaryBtn = styled.button`
   font-size: 16px;
   font-weight: 500;
   color: #fff;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 export const ImageUploadArea = styled.div`

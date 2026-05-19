@@ -6,12 +6,29 @@ const InfoCard = styled.div`
   padding: 25px;
   box-shadow: 0px 4px 20px rgba(0,0,0,0.05);
   margin-bottom: 25px;
+
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+
+  @media (max-width: 600px) {
+    padding: 16px;
+    border-radius: 16px;
+  }
 `;
 
 const ScheduleGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 `;
 
 const CareBox = styled.div`
@@ -21,6 +38,14 @@ const CareBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+   min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 14px;
+  }
 `;
 
 const ScheduleHeader = styled.div`
@@ -44,6 +69,10 @@ color: ${p => p.$overdue ? COLORS.criticalStroke : COLORS.primaryGreen};
   font-size: 0.85rem;
   font-weight: 700;
   margin-left: auto;
+
+  @media (max-width: 420px) {
+    margin-left: 0;
+  }
 `;
 
 const Row = styled.div`
@@ -59,6 +88,11 @@ const InfoGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-top: 15px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 `;
 
 const PillTag = styled.span`
