@@ -54,6 +54,11 @@ async function uploadFormData(path, method, formData) {
 export const api = {
   // Auth
   login: (body) => request("/auth/login", { method: "POST", body: JSON.stringify(body) }),
+  googleAuth: (credential) =>
+  request("/auth/google", {
+    method: "POST",
+    body: JSON.stringify({ credential }),
+  }),
   register: (body) => request("/auth/register", { method: "POST", body: JSON.stringify(body) }),
   getProfile: () => request("/auth/profile"),
   updateProfile: (body) => request("/auth/profile", { method: "PUT", body: JSON.stringify(body) }),

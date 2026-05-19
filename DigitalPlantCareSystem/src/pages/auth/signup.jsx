@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { api } from "../../api/api";
 import { useAuth } from "../../context/AuthContext";
 import * as S from "../../styles/signupStyles"; // Importing as a namespace 'S'
+import GoogleAuthButton from "../../components/GoogleAuthButton";
 
 const Logo = "images/logo/Logo.svg";
 const HeroImg = "images/scott-webb-hDyO6rr3kqk-unsplash.jpg";
@@ -185,6 +186,8 @@ export default function Signup() {
             <S.Btn type="submit" disabled={loading}>
               {loading ? "Creating account…" : "Create Account"}
             </S.Btn>
+
+            <GoogleAuthButton setApiError={setApiError} />
           </form>
 
           <S.BottomText>
