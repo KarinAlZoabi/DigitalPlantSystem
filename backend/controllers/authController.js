@@ -456,9 +456,6 @@ if (!process.env.JWT_SECRET) {
     });
  } catch (error) {
     console.error("Google auth error:", error);
-
-    return res.status(400).json({
-      error: error.message || "Google authentication failed",
-    });
+    return res.status(401).json({ error: "Google authentication failed" });
   }
 };

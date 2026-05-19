@@ -9,6 +9,7 @@ function getToken() {
 // Standard JSON requests
 async function request(path, options = {}) {
   const token = getToken();
+
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers: {
@@ -18,14 +19,23 @@ async function request(path, options = {}) {
     },
   });
 
-  if (res.status === 401) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-    return;
+  const contentType = res.headers.get("content-type");
+  const data = contentType?.includes("application/json")
+    ? await res.json()
+    : { error: await res.text() };
+
+  if (!res.ok) {
+    // Only auto-logout for protected routes, NOT login/register/google auth
+    if (res.status === 401 && !path.startsWith("/auth/")) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+      return;
+    }
+
+    throw new Error(data.error || `Request failed with status ${res.status}`);
   }
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Request failed");
+
   return data;
 }
 
