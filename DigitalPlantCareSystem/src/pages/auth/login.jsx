@@ -129,7 +129,9 @@ export default function Login() {
             <S.Btn type="submit" disabled={loading}>
               {loading ? "Signing in…" : "Sign In"}
             </S.Btn>
-            <GoogleAuthButton setApiError={setApiError} />
+           <div style={{ marginTop: "16px" }}>
+  <GoogleAuthButton setApiError={setApiError} />
+</div>
           </form>
 
           <S.BottomText>
