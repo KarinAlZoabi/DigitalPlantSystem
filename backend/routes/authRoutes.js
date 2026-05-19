@@ -10,6 +10,7 @@ const { profileUpload, handleUploadError } = require("../middleware/upload");
 const {
   register,
   login,
+  googleAuth,
   getProfile,
   updateProfile,
   changePassword,
@@ -41,6 +42,7 @@ const resetPasswordLimiter = rateLimit({
 
 router.post("/register", register);
 router.post("/login", login);
+router.post("/google", googleAuth);
 
 router.get("/profile", auth, getProfile);
 router.put("/profile", auth, updateProfile);

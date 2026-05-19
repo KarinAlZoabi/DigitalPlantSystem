@@ -39,8 +39,21 @@ const userSchema = new mongoose.Schema(
 
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+
+    googleId: {
+  type: String,
+  unique: true,
+  sparse: true,
+},
+
+authProvider: {
+  type: String,
+  enum: ["local", "google"],
+  default: "local",
+},
   },
-  { timestamps: true }
+  { timestamps: true },
+  
 );
 
 module.exports = mongoose.model("User", userSchema);

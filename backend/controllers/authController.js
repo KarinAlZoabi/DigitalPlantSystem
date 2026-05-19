@@ -8,6 +8,26 @@ const UserPlant = require("../models/UserPlant");
 const CareTask = require("../models/CareTask");
 const CareTimeline = require("../models/CareTimeline");
 
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const createToken = (user) => {
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+};
+
+const formatUser = (user) => ({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  profilePicture: user.profilePicture,
+});
+
 const {
   uploadBufferToGridFS,
   deleteGridFSFile,
@@ -72,6 +92,12 @@ exports.login = async (req, res) => {
       return res
         .status(400)
         .json({ error: "No account found with this email" });
+
+    if (!user.passwordHash) {
+  return res.status(400).json({
+    error: "This account uses Google sign-in. Please continue with Google.",
+  });
+}
 
     const match = await bcrypt.compare(password, user.passwordHash);
     if (!match) return res.status(400).json({ error: "Incorrect password" });
@@ -357,5 +383,67 @@ exports.deleteAccount = async (req, res) => {
     res.json({ message: "Account deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+exports.googleAuth = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({ error: "Google credential is required" });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const googleId = payload.sub;
+    const email = payload.email?.toLowerCase();
+    const name = payload.name;
+    const picture = payload.picture;
+    const emailVerified = payload.email_verified;
+
+    if (!email || !emailVerified) {
+      return res.status(400).json({ error: "Google email is not verified" });
+    }
+
+    let user = await User.findOne({
+      $or: [{ googleId }, { email }],
+    });
+
+    if (!user) {
+      user = await User.create({
+        name: name || email.split("@")[0],
+        email,
+        googleId,
+        authProvider: "google",
+        profilePicture: picture || null,
+      });
+    } else {
+      if (!user.googleId) {
+        user.googleId = googleId;
+      }
+
+      if (!user.profilePicture && picture) {
+        user.profilePicture = picture;
+      }
+
+      await user.save();
+    }
+
+    const token = createToken(user);
+
+    return res.json({
+      token,
+      user: formatUser(user),
+    });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    return res.status(401).json({ error: "Google authentication failed" });
   }
 };
