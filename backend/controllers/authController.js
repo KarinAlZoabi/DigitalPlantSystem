@@ -42,7 +42,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 //  Email configuration
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
+  port: 587,
   secure: true,
   family: 4,
   service: process.env.EMAIL_SERVICE || "gmail",
