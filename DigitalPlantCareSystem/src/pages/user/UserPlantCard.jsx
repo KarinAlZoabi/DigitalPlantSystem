@@ -8,11 +8,20 @@ const AttentionBadge = "images/badges/NeedsAttention.png";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 
-function daysBetween(date) {
-  const today = new Date();
-  const target = new Date(date);
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-  return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+function daysUntil(date) {
+  if (!date) return null;
+  return Math.ceil((new Date(date).getTime() - Date.now()) / MS_PER_DAY);
+}
+
+function daysSince(date) {
+  if (!date) return null;
+
+  const diff = Date.now() - new Date(date).getTime();
+
+  // Prevent weird values like -1d ago when server time is slightly ahead
+  return Math.max(0, Math.floor(diff / MS_PER_DAY));
 }
 
 const STATUS_BADGES = {
@@ -194,11 +203,10 @@ export default function UserPlantCard({ userPlant, onWatered }) {
   const { _id, nickname, plantTypeId, lastWatered, healthStatus, location } =
     userPlant;
 
-  const daysAgoWatered = Math.abs(daysBetween(lastWatered));
-
-  const daysUntilNextWater = daysBetween(
-    userPlant.careSchedule.watering.nextDue,
-  );
+  const daysAgoWatered = daysSince(lastWatered);
+const daysUntilNextWater = daysUntil(
+  userPlant.careSchedule?.watering?.nextDue
+);
 
   const handleCardClick = () => {
     // Navigates to a dynamic route like /plant/up-1

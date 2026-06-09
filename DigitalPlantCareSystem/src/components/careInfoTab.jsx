@@ -12,13 +12,20 @@ import {
 import { COLORS } from "./../styles/colors";
 
 //date utilities
-function daysBetween(date) {
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+function daysUntil(date) {
   if (!date) return null;
-  return Math.ceil((new Date(date) - new Date()) / (1000 * 60 * 60 * 24));
+  return Math.ceil((new Date(date).getTime() - Date.now()) / MS_PER_DAY);
 }
+
 function daysAgo(date) {
   if (!date) return null;
-  return Math.floor((new Date() - new Date(date)) / (1000 * 60 * 60 * 24));
+
+  const diff = Date.now() - new Date(date).getTime();
+
+  // Clamp to 0 so it never shows -1d ago
+  return Math.max(0, Math.floor(diff / MS_PER_DAY));
 }
 
 export default function CareInfoTab({
@@ -32,12 +39,13 @@ export default function CareInfoTab({
     return <p style={{ color: COLORS.secondaryText }}>Loading care info...</p>;
 
   //calculate next watering and fertilizing dates
-  const nextWaterDays = careSchedule?.watering?.nextDue
-    ? daysBetween(careSchedule.watering.nextDue)
-    : null;
-  const nextFertDays = careSchedule?.fertilizing?.nextDue
-    ? daysBetween(careSchedule.fertilizing.nextDue)
-    : null;
+const nextWaterDays = careSchedule?.watering?.nextDue
+  ? daysUntil(careSchedule.watering.nextDue)
+  : null;
+
+const nextFertDays = careSchedule?.fertilizing?.nextDue
+  ? daysUntil(careSchedule.fertilizing.nextDue)
+  : null;
   const wateredAgo = daysAgo(lastWatered);
   const fertAgo = daysAgo(lastFertilized);
 
