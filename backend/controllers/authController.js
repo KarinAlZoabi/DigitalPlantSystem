@@ -262,32 +262,98 @@ exports.forgotPassword = async (req, res) => {
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
     const requestId = crypto.randomBytes(4).toString("hex").toUpperCase();
 
-    const { data, error } = await resend.emails.send({
+   const { data, error } = await resend.emails.send({
   from: "PlantCare <onboarding@resend.dev>",
   to: user.email,
   subject: `Reset your PlantCare password - ${requestId}`,
   html: `
-    <h2>Reset Your Password</h2>
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
 
-    <p>Hi ${user.name},</p>
+      <body style="margin:0; padding:0; background-color:#f3f7f1; font-family:Arial, Helvetica, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f7f1; padding:40px 0;">
+          <tr>
+            <td align="center">
+              <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px; background-color:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 28px rgba(45, 80, 50, 0.12);">
+                
+                <tr>
+                  <td style="background:linear-gradient(135deg, #2f6f3e, #6fa85f); padding:34px 30px; text-align:center;">
+                    <div style="font-size:42px; line-height:1;">🌿</div>
+                    <h1 style="margin:12px 0 0; color:#ffffff; font-size:28px; font-weight:700;">
+                      PlantCare
+                    </h1>
+                    <p style="margin:8px 0 0; color:#eaf6e8; font-size:15px;">
+                      Helping your plants stay healthy
+                    </p>
+                  </td>
+                </tr>
 
-    <p>We received a request to reset your PlantCare password.</p>
+                <tr>
+                  <td style="padding:36px 34px 28px;">
+                    <h2 style="margin:0 0 16px; color:#24422a; font-size:24px;">
+                      Reset Your Password
+                    </h2>
 
-    <p>
-      <a href="${resetUrl}" 
-         style="background:#2f855a;color:white;padding:10px 16px;text-decoration:none;border-radius:6px;display:inline-block;">
-        Reset Password
-      </a>
-    </p>
+                    <p style="margin:0 0 14px; color:#4a5c4d; font-size:16px; line-height:1.6;">
+                      Hi ${user.name},
+                    </p>
 
-    <p>Or copy and paste this link into your browser:</p>
-    <p>${resetUrl}</p>
+                    <p style="margin:0 0 24px; color:#4a5c4d; font-size:16px; line-height:1.6;">
+                      We received a request to reset your PlantCare password. Click the button below to create a new password.
+                    </p>
 
-    <p>This link expires in 1 hour.</p>
+                    <table cellpadding="0" cellspacing="0" style="margin:28px auto;">
+                      <tr>
+                        <td align="center" style="background-color:#2f6f3e; border-radius:10px;">
+                          <a href="${resetUrl}" 
+                             style="display:inline-block; padding:14px 28px; color:#ffffff; text-decoration:none; font-size:16px; font-weight:700; border-radius:10px;">
+                            Reset Password
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
 
-    <p>If you did not request this password reset, you can safely ignore this email.</p>
+                    <p style="margin:22px 0 8px; color:#6b7b6e; font-size:14px; line-height:1.6;">
+                      If the button does not work, copy and paste this link into your browser:
+                    </p>
 
-    <p>PlantCare · Helping your plants stay healthy</p>
+                    <p style="margin:0 0 22px; word-break:break-all; color:#2f6f3e; font-size:13px; line-height:1.5;">
+                      ${resetUrl}
+                    </p>
+
+                    <div style="background-color:#f0f7ed; border-left:4px solid #6fa85f; padding:14px 16px; border-radius:8px; margin:26px 0;">
+                      <p style="margin:0; color:#4a5c4d; font-size:14px; line-height:1.6;">
+                        This reset link will expire in <strong>1 hour</strong>.
+                      </p>
+                    </div>
+
+                    <p style="margin:20px 0 0; color:#6b7b6e; font-size:14px; line-height:1.6;">
+                      If you did not request this password reset, you can safely ignore this email. Your account will remain secure.
+                    </p>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="background-color:#f7faf5; padding:22px 30px; text-align:center; border-top:1px solid #e2ecdf;">
+                    <p style="margin:0; color:#7a8b7d; font-size:13px;">
+                      PlantCare · Helping your plants stay healthy
+                    </p>
+                    <p style="margin:8px 0 0; color:#9aaa9d; font-size:12px;">
+                      Request ID: ${requestId}
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
   `,
 });
 
