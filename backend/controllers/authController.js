@@ -8,6 +8,9 @@ const UserPlant = require("../models/UserPlant");
 const CareTask = require("../models/CareTask");
 const CareTimeline = require("../models/CareTimeline");
 
+const dns = require("node:dns");
+dns.setDefaultResultOrder("ipv4first");
+
 const { OAuth2Client } = require("google-auth-library");
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -38,6 +41,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 //  Email configuration
 const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  family: 4,
   service: process.env.EMAIL_SERVICE || "gmail",
   auth: {
     user: process.env.EMAIL_USER,
