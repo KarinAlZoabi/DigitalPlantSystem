@@ -14,7 +14,15 @@ exports.getAllPlantTypes = async (req, res) => {
   try {
     const { search } = req.query;
 
-    const query = search ? { name: { $regex: search, $options: "i" } } : {};
+    const query = search
+  ? {
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { scientificName: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ],
+    }
+  : {};
 
     const plantTypes = await PlantType.find(query).sort({ name: 1 });
 
