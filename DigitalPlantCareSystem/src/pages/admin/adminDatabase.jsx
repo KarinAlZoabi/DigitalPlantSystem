@@ -126,6 +126,7 @@ export default function AdminDatabase() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [plants, setPlants] = useState([]);
+  const [allPlants, setAllPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [mode, setMode] = useState("add");
@@ -138,6 +139,10 @@ export default function AdminDatabase() {
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef(null);
 
+  useEffect(() => {
+  api.getPlantTypes("").then(setAllPlants);
+}, []);
+
   //refetch when query changes
   useEffect(() => {
     api
@@ -148,26 +153,29 @@ export default function AdminDatabase() {
 
   //memoized so it only recalculates when the plant list changes
   const stats = useMemo(() => {
-    const easy = plants.filter(
-      (p) => (p.difficulty || "").toLowerCase() === "easy",
-    ).length;
-    const medium = plants.filter(
-      (p) => (p.difficulty || "").toLowerCase() === "medium",
-    ).length;
-    const hard = plants.filter(
-      (p) => (p.difficulty || "").toLowerCase() === "hard",
-    ).length;
-    return [
-      {
-        value: plants.length,
-        label: "Total Plants in Database",
-        color: "#9810FA",
-      },
-      { value: easy, label: "Easy Care", color: "#4CAF50" },
-      { value: medium, label: "Medium Care", color: "#D49F37" },
-      { value: hard, label: "Hard Care", color: "#E34F4F" },
-    ];
-  }, [plants]);
+  const easy = allPlants.filter(
+    (p) => (p.difficulty || "").toLowerCase() === "easy"
+  ).length;
+
+  const medium = allPlants.filter(
+    (p) => (p.difficulty || "").toLowerCase() === "medium"
+  ).length;
+
+  const hard = allPlants.filter(
+    (p) => (p.difficulty || "").toLowerCase() === "hard"
+  ).length;
+
+  return [
+    {
+      value: allPlants.length,
+      label: "Total Plants in Database",
+      color: "#9810FA",
+    },
+    { value: easy, label: "Easy Care", color: "#4CAF50" },
+    { value: medium, label: "Medium Care", color: "#D49F37" },
+    { value: hard, label: "Hard Care", color: "#E34F4F" },
+  ];
+}, [allPlants]);
 
   // modal handlers
   const onAddPlant = () => {
